@@ -10,7 +10,9 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "clean": "git clean -dfX",
-    "release": "semantic-release",
+    "release": "release-it",
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
+    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
     "build": "bun run typecheck && bob build",
     "codegen": "nitro-codegen --logLevel=\"debug\" && bun run build && node post-script.js",
     "postcodegen": "bun --cwd example pod",
@@ -46,7 +48,8 @@
     "README.md"
   ],
   "workspaces": [
-    "example"
+    "example",
+    "docs"
   ],
   "repository": "https://github.com/pieczasz/react-native-dynamic-activities.git",
   "author": "Pieczasz",
@@ -58,7 +61,11 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@jamesacarr/eslint-formatter-github-actions": "^0.2.0",
+    "@react-native/eslint-config": "0.79.3",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@types/jest": "^29.5.12",
