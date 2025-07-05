@@ -16,19 +16,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          cache: bun
+          cache: npm
       - name: Install commitlint
-        run: bun install -D @commitlint/cli @commitlint/config-conventional
+        run: npm install --save-dev @commitlint/cli @commitlint/config-conventional
       - name: Print versions
         run: |
           git --version
           node --version
-          bun --version
-          bunx commitlint --version
+          npm --version
+          npx commitlint --version
 
       - name: Validate current commit (last commit) with commitlint
         if: github.event_name == 'push'
-        run: bunx commitlint --last --verbose
+        run: npx commitlint --last --verbose
 
       - name: Validate PR commits with commitlint
         if: github.event_name == 'pull_request'
