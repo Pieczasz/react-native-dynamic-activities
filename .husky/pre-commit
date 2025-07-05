@@ -1,0 +1,2 @@
+bun test
+bun commitlint --from HEAD~1 --to HEAD --verbose

@@ -13,11 +13,18 @@
     "release": "semantic-release",
     "build": "bun run typecheck && bob build",
     "codegen": "nitro-codegen --logLevel=\"debug\" && bun run build && node post-script.js",
-    "postcodegen": "bun --cwd example pod"
+    "postcodegen": "bun --cwd example pod",
+    "prepare": "husky"
   },
   "keywords": [
     "react-native",
-    "react-native-dynamic-activities"
+    "react-native-dynamic-activities",
+    "live-activities",
+    "activity-kit",
+    "alarm-kit",
+    "widget-kit",
+    "nitro-modules",
+    "nitro"
   ],
   "files": [
     "src",
@@ -56,12 +63,16 @@
     "@semantic-release/git": "^10.0.1",
     "@types/jest": "^29.5.12",
     "@types/react": "^19.1.0",
+    "conventional-changelog-conventionalcommits": "^9.0.0",
+    "@commitlint/config-conventional": "^17.0.2",
+    "commitlint": "^19.8.1",
+    "release-it": "^19.0.3",
+    "husky": "^9.1.7",
     "nitro-codegen": "^0.26.3",
     "react": "19.1.0",
     "react-native": "0.80.0",
     "react-native-builder-bob": "^0.37.0",
     "react-native-nitro-modules": "^0.26.3",
-    "conventional-changelog-conventionalcommits": "^9.0.0",
     "semantic-release": "^24.2.3",
     "typescript": "5.0.4"
   },
@@ -117,5 +128,55 @@
         }
       ]
     ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "release-it": {
+    "npm": {
+      "publish": true
+    },
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}",
+      "requireCleanWorkingDir": true
+    },
+    "github": {
+      "release": true
+    },
+    "hooks": {
+      "before:release": "bun i && bun typescript"
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": {
+          "name": "conventionalcommits",
+          "types": [
+            {
+              "type": "feat",
+              "section": "✨ Features"
+            },
+            {
+              "type": "perf",
+              "section": "💨 Performance Improvements"
+            },
+            {
+              "type": "fix",
+              "section": "🐛 Bug Fixes"
+            },
+            {
+              "type": "chore(deps)",
+              "section": "🛠️ Dependency Upgrades"
+            },
+            {
+              "type": "docs",
+              "section": "📚 Documentation"
+            }
+          ]
+        }
+      }
+    }
   }
 }
