@@ -1,54 +1,78 @@
 import Foundation
 import ActivityKit
-import ActivityKit
+
+// MARK: - Hex String → Data helper
+
+private extension Data {
+    /// Creates `Data` from a hexadecimal-encoded string. Returns `nil` if the
+    /// string contains non-hex characters or has an odd length.
+    init?(hex string: String) {
+        let len = string.count
+        guard len % 2 == 0 else { return nil }
+
+        self.init(capacity: len / 2)
+        var index = string.startIndex
+        for _ in 0 ..< len / 2 {
+            let nextIndex = string.index(index, offsetBy: 2)
+            let byteString = string[index..<nextIndex]
+            guard let byte = UInt8(byteString, radix: 16) else { return nil }
+            self.append(byte)
+            index = nextIndex
+        }
+    }
+}
 
 class LiveActivities: LiveActivitiesSpec {
-    /**
-     * Check if Live Activities are supported on this device
-     * @returns true if Live Activities are supported, false otherwise
-     */
     func areLiveActivitiesSupported() -> [String: Any] {
         if #available(iOS 26.0, *) {
             return [
                 "supported": ActivityAuthorizationInfo().areActivitiesEnabled,
-                "version": "26.0 or higher - You can use everything"
+                "version": 26.0,
+                "comment": "You can use everything"
             ]
         } else if #available(iOS 18.0, *) {
             return [
                 "supported": ActivityAuthorizationInfo().areActivitiesEnabled,
-                "version": "Between 18.0 and 26.0 - You can't use alertConfiguration and start date while starting a 
-                Live Activity and you can't also use pending state while ending a Live Activity"
+                "version": 18.0,
+                "comment": """
+                You can't use alertConfiguration and start date while starting a 
+                Live Activity and you can't also use pending state while ending a Live Activity
+                """
             ]
         } else if #available(iOS 17.2, *) {
             return [
                 "supported": ActivityAuthorizationInfo().areActivitiesEnabled,
-                "version": "Between 17.2 and 18.0 - You can't use alertConfiguration and start date while starting a 
+                "version": 17.2,
+                "comment": """
+                You can't use alertConfiguration and start date while starting a 
                 Live Activity and you can't also use pending state while ending a Live Activity;
                 You also can't use style while starting a Live Activity
-                "
+                """
             ]
         } else if #available(iOS 16.2, *) {
             return [
                 "supported": ActivityAuthorizationInfo().areActivitiesEnabled,
-                "version": "Between 16.2 and 17.2 - You can't use alertConfiguration and start date while starting a 
+                "version": 16.2,
+                "comment": """
+                You can't use alertConfiguration and start date while starting a 
                 Live Activity and you can't also use pending state while ending a Live Activity;
-                You also can't use style while starting a Live Activity
+                You also can't use style while starting a Live Activity;
                 You also can't use timestamp while updating a Live Activity and while ending a Live Activity
-                "
+                """
             ]
         } else {
             return [
                 "supported": false,
-                "version": "16.1 or lower - Live Activities are not supported on this device"
+                "version": 16.1,
+                "comment": "Live Activities are not supported on this device"
             ]
         }
     }
     
-
     func startLiveActivity(
         attributes: Attributes,
         content: ActivityContent<Activity<Attributes>.ContentState>,
-        pushToken: PushType? = nil,
+        pushToken: [String: Any]? = nil,
         style: ActivityStyle? = nil,
         alertConfiguration: AlertConfiguration? = nil,
         start: Date? = nil
@@ -62,44 +86,49 @@ class LiveActivities: LiveActivitiesSpec {
             throw createAuthorizationError(code: "disabledByUser", message: "Live Activities are disabled by the user")
         }
 
-        if (alertConfiguration != nil && start != nil && style != nil) {
+        // Convert the JS dictionary into Activity.PushType
+        let nativePushType: PushType? = {
+            guard let dict = pushToken,
+                  let tokenHex = dict["token"] as? String,
+                  let tokenData = Data(hex: tokenHex) else { return nil }
+            return .token(tokenData)
+        }()
+
+        do {
+            let activity: Activity<Attributes>
+
             if #available(iOS 26.0, *) {
-                let activity = Activity.request(
+                activity = try Activity.request(
                     attributes: attributes,
                     content: content,
-                    pushType: pushToken,
+                    pushType: nativePushType,
                     style: style,
                     alertConfiguration: alertConfiguration,
+                    start: start
                 )
-                return activity
-            }
-        }
-
-        if (alertConfiguration == nil && start == nil && style != nil) {
-            if #available(iOS 18.0, *) {
-                let activity = Activity.request(
+            } else if #available(iOS 18.0, *) {
+                activity = try Activity.request(
                     attributes: attributes,
                     content: content,
-                    pushType: pushToken,
-                    style: style,
+                    pushType: nativePushType,
+                    style: style
                 )
-                return activity
+            } else { // iOS 16.2+
+                activity = try Activity.request(
+                    attributes: attributes,
+                    content: content,
+                    pushType: nativePushType
+                )
             }
-        }
-        
-        if #available(iOS 16.2, *) {
-            let activity = Activity.request(
-                attributes: attributes,
-                content: content,
-                pushType: pushToken,
-            )
-            return activity
-        }
 
-        throw createSystemError(code: "UNSUPPORTED_VERSION", message: "Live Activities require iOS 16.2 or later")
+            return activity
+        } catch let authError as ActivityAuthorizationError {
+            throw mapActivityAuthorizationError(authError)
+        } catch {
+            throw createSystemError(code: "UNKNOWN_ERROR", message: error.localizedDescription)
+        }
     }
     
-
     func updateLiveActivity(
         activityId: String,
         content: [String: Any],

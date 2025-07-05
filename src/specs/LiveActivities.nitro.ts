@@ -20,7 +20,6 @@ export interface LiveActivityContent {
 
 export interface LiveActivityPushToken {
   token: string
-  channel: string
 }
 
 export type LiveActivityStyle = 'standard' | 'transient'
@@ -38,6 +37,7 @@ export type LiveActivityDismissalPolicy =
 
 export interface PushTokenUpdateEvent {
   activityId: string
+  /** Hex-encoded APNs token previously provided by native */
   token: string
 }
 
@@ -47,7 +47,11 @@ export interface DynamicActivities
    * Check if Live Activities are supported on this device
    * @returns true if Live Activities are supported, false otherwise
    */
-  areLiveActivitiesSupported(): Promise<{ supported: boolean; version: string }>
+  areLiveActivitiesSupported(): Promise<{
+    supported: boolean
+    version: number
+    comment: string
+  }>
 
   /**
    * Start a new Live Activity

@@ -8,7 +8,8 @@ jest.mock('react-native-nitro-modules', () => ({
           areLiveActivitiesSupported: jest.fn(() => {
             return {
               supported: true,
-              version: '26.0 or higher - You can use everything',
+              version: 26.0,
+              comment: 'You can use everything',
             }
           }),
           startLiveActivity: jest.fn(() =>

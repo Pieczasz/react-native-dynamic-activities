@@ -13,7 +13,8 @@ const mockDynamicActivities = {
   areLiveActivitiesSupported() {
     return {
       supported: true,
-      version: '26.0 or higher - You can use everything',
+      version: 26.0,
+      comment: 'You can use everything',
     }
   },
 
@@ -69,7 +70,7 @@ describe('LiveActivities specification', () => {
       await mockDynamicActivities.startLiveActivity(
         { title: 'Test', body: 'Body' },
         { state: 'active', relevanceScore: 1 },
-        { token: 'token123', channel: 'apns' },
+        { token: 'token123' },
         'standard'
       )
 
