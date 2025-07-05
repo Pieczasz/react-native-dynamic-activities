@@ -9,6 +9,9 @@
 .vscode/
 jsconfig.json
 
+# Cursor
+.cursor
+
 # Xcode
 #
 build/
