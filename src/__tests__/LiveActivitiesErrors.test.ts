@@ -130,7 +130,7 @@ describe('Live Activities Error Handling', () => {
       ).toBe('Ensure your app has the required Live Activity entitlement.')
       expect(
         LiveActivityRecoverySuggestions[LiveActivityErrorCode.UNSUPPORTED]
-      ).toBe('Live Activities require iOS 16.1 or later.')
+      ).toBe('Live Activities require iOS 16.2 or later.')
       expect(
         LiveActivityRecoverySuggestions[LiveActivityErrorCode.VISIBILITY]
       ).toBe('Start Live Activities only when your app is in the foreground.')

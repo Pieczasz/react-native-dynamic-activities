@@ -47,7 +47,7 @@ export interface DynamicActivities
    * Check if Live Activities are supported on this device
    * @returns true if Live Activities are supported, false otherwise
    */
-  areLiveActivitiesSupported(): boolean
+  areLiveActivitiesSupported(): Promise<{ supported: boolean; version: string }>
 
   /**
    * Start a new Live Activity

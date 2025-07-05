@@ -1,12 +1,16 @@
-// Global Jest setup for React Native Dynamic Activities
+import { jest } from '@jest/globals'
 
-// Mock the react-native-nitro-modules package
 jest.mock('react-native-nitro-modules', () => ({
   NitroModules: {
     createHybridObject: jest.fn((name) => {
       if (name === 'DynamicActivities') {
         return {
-          areLiveActivitiesSupported: jest.fn(() => true),
+          areLiveActivitiesSupported: jest.fn(() => {
+            return {
+              supported: true,
+              version: '26.0 or higher - You can use everything',
+            }
+          }),
           startLiveActivity: jest.fn(() =>
             Promise.resolve({ activityId: 'test-activity-id' })
           ),

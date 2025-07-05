@@ -294,7 +294,7 @@ export const LiveActivityRecoverySuggestions = {
   [LiveActivityErrorCode.UNENTITLED]:
     'Ensure your app has the required Live Activity entitlement.',
   [LiveActivityErrorCode.UNSUPPORTED]:
-    'Live Activities require iOS 16.1 or later.',
+    'Live Activities require iOS 16.2 or later.',
   [LiveActivityErrorCode.UNSUPPORTED_TARGET]:
     'Ensure your app target has the required Live Activity entitlement.',
   [LiveActivityErrorCode.VISIBILITY]:

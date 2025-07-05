@@ -4,7 +4,7 @@ react-native-dynamic-activities is a react native package built with Nitro Modul
 
 [![Version](https://img.shields.io/npm/v/react-native-dynamic-activities.svg)](https://www.npmjs.com/package/react-native-dynamic-activities)
 [![Downloads](https://img.shields.io/npm/dm/react-native-dynamic-activities.svg)](https://www.npmjs.com/package/react-native-dynamic-activities)
-[![License](https://img.shields.io/npm/l/react-native-dynamic-activities.svg)](https://github.com/patrickkabwe/react-native-dynamic-activities/LICENSE)
+[![License](https://img.shields.io/npm/l/react-native-dynamic-activities.svg)](https://github.com/Pieczasz/react-native-dynamic-activities/LICENSE)
 
 ## Requirements
 

@@ -11,7 +11,10 @@ import type {
 
 const mockDynamicActivities = {
   areLiveActivitiesSupported() {
-    return true
+    return {
+      supported: true,
+      version: '26.0 or higher - You can use everything',
+    }
   },
 
   async startLiveActivity(
