@@ -51,7 +51,10 @@ namespace margelo::nitro::dynamicactivities {
 
   public:
     // Methods
-    double sum(double num1, double num2) override;
+    std::shared_ptr<Promise<LiveActivitiesSupportInfo>> areLiveActivitiesSupported() override;
+    std::shared_ptr<Promise<LiveActivityStartResult>> startLiveActivity(const LiveActivityAttributes& attributes, const LiveActivityContent& content, const std::optional<LiveActivityPushToken>& pushToken, std::optional<LiveActivityStyle> style, const std::optional<LiveActivityAlertConfiguration>& alertConfiguration, std::optional<std::chrono::system_clock::time_point> start) override;
+    std::shared_ptr<Promise<void>> updateLiveActivity(const std::string& activityId, const LiveActivityContent& content, const std::optional<LiveActivityAlertConfiguration>& alertConfiguration, std::optional<std::chrono::system_clock::time_point> timestamp) override;
+    std::shared_ptr<Promise<void>> endLiveActivity(const std::string& activityId, const LiveActivityContent& content, std::optional<LiveActivityDismissalPolicy> dismissalPolicy) override;
 
   private:
     friend HybridBase;

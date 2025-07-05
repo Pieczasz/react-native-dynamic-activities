@@ -101,14 +101,108 @@ public class HybridDynamicActivitiesSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func sum(num1: Double, num2: Double) -> bridge.Result_double_ {
+  public final func areLiveActivitiesSupported() -> bridge.Result_std__shared_ptr_Promise_LiveActivitiesSupportInfo___ {
     do {
-      let __result = try self.__implementation.sum(num1: num1, num2: num2)
-      let __resultCpp = __result
-      return bridge.create_Result_double_(__resultCpp)
+      let __result = try self.__implementation.areLiveActivitiesSupported()
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_LiveActivitiesSupportInfo__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_LiveActivitiesSupportInfo__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_LiveActivitiesSupportInfo__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_LiveActivitiesSupportInfo___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_double_(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_LiveActivitiesSupportInfo___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func startLiveActivity(attributes: LiveActivityAttributes, content: LiveActivityContent, pushToken: bridge.std__optional_LiveActivityPushToken_, style: bridge.std__optional_LiveActivityStyle_, alertConfiguration: bridge.std__optional_LiveActivityAlertConfiguration_, start: bridge.std__optional_std__chrono__system_clock__time_point_) -> bridge.Result_std__shared_ptr_Promise_LiveActivityStartResult___ {
+    do {
+      let __result = try self.__implementation.startLiveActivity(attributes: attributes, content: content, pushToken: { () -> LiveActivityPushToken? in
+        if let __unwrapped = pushToken.value {
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }(), style: style.value, alertConfiguration: { () -> LiveActivityAlertConfiguration? in
+        if let __unwrapped = alertConfiguration.value {
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }(), start: { () -> Date? in
+        if let __unwrapped = start.value {
+          return Date(fromChrono: __unwrapped)
+        } else {
+          return nil
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_LiveActivityStartResult__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_LiveActivityStartResult__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_LiveActivityStartResult__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_LiveActivityStartResult___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_LiveActivityStartResult___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func updateLiveActivity(activityId: std.string, content: LiveActivityContent, alertConfiguration: bridge.std__optional_LiveActivityAlertConfiguration_, timestamp: bridge.std__optional_std__chrono__system_clock__time_point_) -> bridge.Result_std__shared_ptr_Promise_void___ {
+    do {
+      let __result = try self.__implementation.updateLiveActivity(activityId: String(activityId), content: content, alertConfiguration: { () -> LiveActivityAlertConfiguration? in
+        if let __unwrapped = alertConfiguration.value {
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }(), timestamp: { () -> Date? in
+        if let __unwrapped = timestamp.value {
+          return Date(fromChrono: __unwrapped)
+        } else {
+          return nil
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve() })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func endLiveActivity(activityId: std.string, content: LiveActivityContent, dismissalPolicy: bridge.std__optional_LiveActivityDismissalPolicy_) -> bridge.Result_std__shared_ptr_Promise_void___ {
+    do {
+      let __result = try self.__implementation.endLiveActivity(activityId: String(activityId), content: content, dismissalPolicy: dismissalPolicy.value)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve() })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
     }
   }
 }

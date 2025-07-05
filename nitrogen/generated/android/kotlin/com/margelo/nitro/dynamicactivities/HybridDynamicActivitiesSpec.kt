@@ -42,7 +42,19 @@ abstract class HybridDynamicActivitiesSpec: HybridObject() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun sum(num1: Double, num2: Double): Double
+  abstract fun areLiveActivitiesSupported(): Promise<LiveActivitiesSupportInfo>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun startLiveActivity(attributes: LiveActivityAttributes, content: LiveActivityContent, pushToken: LiveActivityPushToken?, style: LiveActivityStyle?, alertConfiguration: LiveActivityAlertConfiguration?, start: java.time.Instant?): Promise<LiveActivityStartResult>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun updateLiveActivity(activityId: String, content: LiveActivityContent, alertConfiguration: LiveActivityAlertConfiguration?, timestamp: java.time.Instant?): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun endLiveActivity(activityId: String, content: LiveActivityContent, dismissalPolicy: LiveActivityDismissalPolicy?): Promise<Unit>
 
   private external fun initHybrid(): HybridData
 

@@ -12,9 +12,38 @@
 // Forward declaration of `HybridDynamicActivitiesSpec_cxx` to properly resolve imports.
 namespace DynamicActivities { class HybridDynamicActivitiesSpec_cxx; }
 
+// Forward declaration of `LiveActivitiesSupportInfo` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivitiesSupportInfo; }
+// Forward declaration of `LiveActivityStartResult` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityStartResult; }
+// Forward declaration of `LiveActivityAttributes` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityAttributes; }
+// Forward declaration of `LiveActivityContent` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityContent; }
+// Forward declaration of `LiveActivityState` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { enum class LiveActivityState; }
+// Forward declaration of `LiveActivityPushToken` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityPushToken; }
+// Forward declaration of `LiveActivityStyle` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { enum class LiveActivityStyle; }
+// Forward declaration of `LiveActivityAlertConfiguration` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityAlertConfiguration; }
+// Forward declaration of `LiveActivityDismissalPolicy` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { enum class LiveActivityDismissalPolicy; }
 
-
-
+#include <NitroModules/Promise.hpp>
+#include "LiveActivitiesSupportInfo.hpp"
+#include <string>
+#include "LiveActivityStartResult.hpp"
+#include <optional>
+#include "LiveActivityAttributes.hpp"
+#include "LiveActivityContent.hpp"
+#include "LiveActivityState.hpp"
+#include <chrono>
+#include "LiveActivityPushToken.hpp"
+#include "LiveActivityStyle.hpp"
+#include "LiveActivityAlertConfiguration.hpp"
+#include "LiveActivityDismissalPolicy.hpp"
 
 #include "DynamicActivities-Swift-Cxx-Umbrella.hpp"
 
@@ -55,8 +84,32 @@ namespace margelo::nitro::dynamicactivities {
 
   public:
     // Methods
-    inline double sum(double num1, double num2) override {
-      auto __result = _swiftPart.sum(std::forward<decltype(num1)>(num1), std::forward<decltype(num2)>(num2));
+    inline std::shared_ptr<Promise<LiveActivitiesSupportInfo>> areLiveActivitiesSupported() override {
+      auto __result = _swiftPart.areLiveActivitiesSupported();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<LiveActivityStartResult>> startLiveActivity(const LiveActivityAttributes& attributes, const LiveActivityContent& content, const std::optional<LiveActivityPushToken>& pushToken, std::optional<LiveActivityStyle> style, const std::optional<LiveActivityAlertConfiguration>& alertConfiguration, std::optional<std::chrono::system_clock::time_point> start) override {
+      auto __result = _swiftPart.startLiveActivity(attributes, content, pushToken, style, alertConfiguration, start);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<void>> updateLiveActivity(const std::string& activityId, const LiveActivityContent& content, const std::optional<LiveActivityAlertConfiguration>& alertConfiguration, std::optional<std::chrono::system_clock::time_point> timestamp) override {
+      auto __result = _swiftPart.updateLiveActivity(activityId, content, alertConfiguration, timestamp);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<void>> endLiveActivity(const std::string& activityId, const LiveActivityContent& content, std::optional<LiveActivityDismissalPolicy> dismissalPolicy) override {
+      auto __result = _swiftPart.endLiveActivity(activityId, content, dismissalPolicy);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

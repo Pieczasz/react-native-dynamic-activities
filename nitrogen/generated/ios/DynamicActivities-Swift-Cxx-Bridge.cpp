@@ -13,6 +13,38 @@
 
 namespace margelo::nitro::dynamicactivities::bridge::swift {
 
+  // pragma MARK: std::function<void(const LiveActivitiesSupportInfo& /* result */)>
+  Func_void_LiveActivitiesSupportInfo create_Func_void_LiveActivitiesSupportInfo(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = DynamicActivities::Func_void_LiveActivitiesSupportInfo::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const LiveActivitiesSupportInfo& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
+  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = DynamicActivities::Func_void_std__exception_ptr::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const std::exception_ptr& error) mutable -> void {
+      swiftClosure.call(error);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const LiveActivityStartResult& /* result */)>
+  Func_void_LiveActivityStartResult create_Func_void_LiveActivityStartResult(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = DynamicActivities::Func_void_LiveActivityStartResult::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const LiveActivityStartResult& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::function<void()>
+  Func_void create_Func_void(void* _Nonnull swiftClosureWrapper) {
+    auto swiftClosure = DynamicActivities::Func_void::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)]() mutable -> void {
+      swiftClosure.call();
+    };
+  }
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpec>
   std::shared_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpec> create_std__shared_ptr_margelo__nitro__dynamicactivities__HybridDynamicActivitiesSpec_(void* _Nonnull swiftUnsafePointer) {
     DynamicActivities::HybridDynamicActivitiesSpec_cxx swiftPart = DynamicActivities::HybridDynamicActivitiesSpec_cxx::fromUnsafe(swiftUnsafePointer);

@@ -14,7 +14,10 @@ namespace margelo::nitro::dynamicactivities {
     HybridObject::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
-      prototype.registerHybridMethod("sum", &HybridDynamicActivitiesSpec::sum);
+      prototype.registerHybridMethod("areLiveActivitiesSupported", &HybridDynamicActivitiesSpec::areLiveActivitiesSupported);
+      prototype.registerHybridMethod("startLiveActivity", &HybridDynamicActivitiesSpec::startLiveActivity);
+      prototype.registerHybridMethod("updateLiveActivity", &HybridDynamicActivitiesSpec::updateLiveActivity);
+      prototype.registerHybridMethod("endLiveActivity", &HybridDynamicActivitiesSpec::endLiveActivity);
     });
   }
 

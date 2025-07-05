@@ -14,7 +14,10 @@ public protocol HybridDynamicActivitiesSpec_protocol: HybridObject {
   
 
   // Methods
-  func sum(num1: Double, num2: Double) throws -> Double
+  func areLiveActivitiesSupported() throws -> Promise<LiveActivitiesSupportInfo>
+  func startLiveActivity(attributes: LiveActivityAttributes, content: LiveActivityContent, pushToken: LiveActivityPushToken?, style: LiveActivityStyle?, alertConfiguration: LiveActivityAlertConfiguration?, start: Date?) throws -> Promise<LiveActivityStartResult>
+  func updateLiveActivity(activityId: String, content: LiveActivityContent, alertConfiguration: LiveActivityAlertConfiguration?, timestamp: Date?) throws -> Promise<Void>
+  func endLiveActivity(activityId: String, content: LiveActivityContent, dismissalPolicy: LiveActivityDismissalPolicy?) throws -> Promise<Void>
 }
 
 /// See ``HybridDynamicActivitiesSpec``

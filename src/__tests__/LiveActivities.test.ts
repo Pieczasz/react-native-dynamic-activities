@@ -85,7 +85,7 @@ describe('LiveActivities specification', () => {
       })
     ).resolves.toBeUndefined()
 
-    const dismissalPolicy: LiveActivityDismissalPolicy = { policy: 'default' }
+    const dismissalPolicy: LiveActivityDismissalPolicy = 'default'
 
     await expect(
       mockDynamicActivities.endLiveActivity(

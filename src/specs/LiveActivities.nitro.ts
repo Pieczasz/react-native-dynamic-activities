@@ -30,15 +30,24 @@ export interface LiveActivityAlertConfiguration {
   sound: string
 }
 
-export type LiveActivityDismissalPolicy =
-  | { policy: 'default' }
-  | { policy: 'immediate' }
-  | { policy: 'after'; date: Date }
+// TODO: Add support for after date
+export type LiveActivityDismissalPolicy = 'default' | 'immediate' | 'after'
 
 export interface PushTokenUpdateEvent {
   activityId: string
   /** Hex-encoded APNs token previously provided by native */
   token: string
+}
+
+export interface LiveActivitiesSupportInfo {
+  supported: boolean
+  version: number
+  comment: string
+}
+
+export interface LiveActivityStartResult {
+  activityId: string
+  pushToken?: string
 }
 
 export interface DynamicActivities
@@ -47,11 +56,7 @@ export interface DynamicActivities
    * Check if Live Activities are supported on this device
    * @returns true if Live Activities are supported, false otherwise
    */
-  areLiveActivitiesSupported(): Promise<{
-    supported: boolean
-    version: number
-    comment: string
-  }>
+  areLiveActivitiesSupported(): Promise<LiveActivitiesSupportInfo>
 
   /**
    * Start a new Live Activity
@@ -72,7 +77,7 @@ export interface DynamicActivities
     style?: LiveActivityStyle,
     alertConfiguration?: LiveActivityAlertConfiguration,
     start?: Date
-  ): Promise<{ activityId: string; pushToken?: string }>
+  ): Promise<LiveActivityStartResult>
 
   /**
    * Update an existing Live Activity
