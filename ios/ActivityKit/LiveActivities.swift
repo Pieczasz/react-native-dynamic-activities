@@ -113,7 +113,7 @@ class LiveActivities: LiveActivitiesSpec {
                     pushType: nativePushType,
                     style: style
                 )
-            } else { // iOS 16.2+
+            } else {
                 activity = try Activity.request(
                     attributes: attributes,
                     content: content,
@@ -131,25 +131,51 @@ class LiveActivities: LiveActivitiesSpec {
     
     func updateLiveActivity(
         activityId: String,
-        content: [String: Any],
-        alertConfiguration: [String: Any]?,
-        timestamp: Date?
+        content: ActivityContent<Activity<Attributes>.ContentState>,
+        alertConfiguration: AlertConfiguration? = nil,
+        timestamp: Date? = nil
     ) throws {
         guard #available(iOS 16.2, *) else {
             throw createSystemError(code: "UNSUPPORTED_VERSION", message: "Live Activities require iOS 16.2 or later")
         }
-        // TODO: Implement actual Live Activity update logic
+
         let authInfo = ActivityAuthorizationInfo()
         if !authInfo.areActivitiesEnabled {
             throw createAuthorizationError(code: "disabledByUser", message: "Live Activities are disabled by the user")
         }
-        
+
+        do {
+            if #available(iOS 17.2, *) && timestamp != nil {
+                try Activity.update(
+                    activityId,
+                    content: content,
+                    alertConfiguration: alertConfiguration,
+                    timestamp: timestamp
+                )
+            } else if alertConfiguration != nil {
+                try Activity.update(
+                    activityId,
+                    content: content,
+                    alertConfiguration: alertConfiguration
+                )
+            } else {
+                try Activity.update(
+                    activityId,
+                    content: content
+                )
+            }
+        } catch let authError as ActivityAuthorizationError {
+            throw mapActivityAuthorizationError(authError)
+        } catch {
+            throw createSystemError(code: "UNKNOWN_ERROR", message: error.localizedDescription)
+        }
     }
     
     func endLiveActivity(
         activityId: String,
-        content: [String: Any],
-        dismissalPolicy: [String: Any]?
+        content: ActivityContent<Activity<Attributes>.ContentState>,
+        dismissalPolicy: DismissalPolicy? = nil,
+        timestamp: Date? = nil
     ) throws {
         // TODO: Implement actual Live Activity end logic
         guard #available(iOS 16.2, *) else {
@@ -161,6 +187,26 @@ class LiveActivities: LiveActivitiesSpec {
             throw createAuthorizationError(code: "disabledByUser", message: "Live Activities are disabled by the user")
         }
         
+        do {
+            if #available(iOS 17.2, *) {
+                try Activity.end(
+                activityId, 
+                content: content, 
+                dismissalPolicy: dismissalPolicy, 
+                timestamp: timestamp
+                )
+            } else {
+                try Activity.end(
+                    activityId, 
+                    content: content, 
+                    dismissalPolicy: dismissalPolicy
+                )
+            }
+        } catch let authError as ActivityAuthorizationError {
+            throw mapActivityAuthorizationError(authError)
+        } catch {
+            throw createSystemError(code: "UNKNOWN_ERROR", message: error.localizedDescription)
+        }
     }
     
     private func createAuthorizationError(code: String, message: String) -> NSError {
