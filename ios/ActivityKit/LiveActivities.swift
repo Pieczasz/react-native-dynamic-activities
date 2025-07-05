@@ -1,8 +1,6 @@
 import Foundation
 import ActivityKit
 
-// MARK: - Hex String → Data helper
-
 private extension Data {
     /// Creates `Data` from a hexadecimal-encoded string. Returns `nil` if the
     /// string contains non-hex characters or has an odd length.
@@ -125,7 +123,7 @@ class LiveActivities: LiveActivitiesSpec {
         } catch let authError as ActivityAuthorizationError {
             throw mapActivityAuthorizationError(authError)
         } catch {
-            throw createSystemError(code: "UNKNOWN_ERROR", message: error.localizedDescription)
+            throw createSystemError(code: "unknownError", message: error.localizedDescription)
         }
     }
     
@@ -167,7 +165,7 @@ class LiveActivities: LiveActivitiesSpec {
         } catch let authError as ActivityAuthorizationError {
             throw mapActivityAuthorizationError(authError)
         } catch {
-            throw createSystemError(code: "UNKNOWN_ERROR", message: error.localizedDescription)
+            throw createSystemError(code: "unknownError", message: error.localizedDescription)
         }
     }
     
@@ -205,7 +203,7 @@ class LiveActivities: LiveActivitiesSpec {
         } catch let authError as ActivityAuthorizationError {
             throw mapActivityAuthorizationError(authError)
         } catch {
-            throw createSystemError(code: "UNKNOWN_ERROR", message: error.localizedDescription)
+            throw createSystemError(code: "unknownError", message: error.localizedDescription)
         }
     }
     
@@ -233,21 +231,39 @@ class LiveActivities: LiveActivitiesSpec {
         )
     }
     
-    // MARK: - ActivityAuthorizationError Mapping
-    
     @available(iOS 16.2, *)
     private func mapActivityAuthorizationError(_ error: ActivityAuthorizationError) -> NSError {
-        let (code, message) = switch error {
-        case .disabledByUser:
-            ("disabledByUser", "Live Activities are disabled by the user. Please ask the user to enable them in Settings.")
-        case .frequentPushes:
-            ("frequentPushes", "Too many push notifications have been sent. Please reduce the frequency of updates.")
-        case .insufficientPrivilege:
-            ("insufficientPrivilege", "The app does not have sufficient permissions to create Live Activities.")
-        @unknown default:
-            ("UNKNOWN_ERROR", "An unknown authorization error occurred.")
-        }
-        
+        let (code, message): (String, String) = {
+            switch error {
+            case .attributesTooLarge:
+                return ("attributesTooLarge", "The provided Live Activity attributes exceeded the maximum size of 4KB.")
+            case .denied:
+                return ("denied", "A person deactivated Live Activities in Settings.")
+            case .globalMaximumExceeded:
+                return ("globalMaximumExceeded", "The device reached the maximum number of ongoing Live Activities.")
+            case .malformedActivityIdentifier:
+                return ("malformedActivityIdentifier", "The provided activity identifier is malformed.")
+            case .missingProcessIdentifier:
+                return ("missingProcessIdentifier", "The process that tried to start the Live Activity is missing a process identifier.")
+            case .persistenceFailure:
+                return ("persistenceFailure", "The system couldn't persist the Live Activity.")
+            case .reconnectNotPermitted:
+                return ("reconnectNotPermitted", "The process that tried to recreate the Live Activity is not the one that originally created it.")
+            case .targetMaximumExceeded:
+                return ("targetMaximumExceeded", "The app has already started the maximum number of concurrent Live Activities.")
+            case .unentitled:
+                return ("unentitled", "The app doesn't have the required entitlement to start a Live Activity.")
+            case .unsupported:
+                return ("unsupported", "The device doesn't support Live Activities.")
+            case .unsupportedTarget:
+                return ("unsupportedTarget", "The app doesn't have the required entitlement to start a Live Activity.")
+            case .visibility:
+                return ("visibility", "The app tried to start the Live Activity while it was in the background.")
+            @unknown default:
+                return ("unknownError", "An unknown authorization error occurred.")
+            }
+        }()
+
         return createAuthorizationError(code: code, message: message)
     }
 }
