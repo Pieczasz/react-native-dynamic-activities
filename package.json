@@ -86,7 +86,7 @@
     "release-it": "^19.0.3",
     "semantic-release": "^24.2.3",
     "ts-jest": "^29.4.0",
-    "typescript": "5.0.4"
+    "typescript": "5.9.2"
   },
   "peerDependencies": {
     "react": "*",
