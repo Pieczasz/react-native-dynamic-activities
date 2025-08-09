@@ -1,62 +1,56 @@
-import type { HybridObject } from 'react-native-nitro-modules'
+import type { HybridObject } from "react-native-nitro-modules";
 
 export interface LiveActivityAttributes {
-  title: string
-  body: string
+  title: string;
+  body: string;
 }
 
-export type LiveActivityState =
-  | 'active'
-  | 'dismissed'
-  | 'pending'
-  | 'stale'
-  | 'ended'
+export type LiveActivityState = "active" | "dismissed" | "pending" | "stale" | "ended";
 
 export interface LiveActivityContent {
-  state: LiveActivityState
-  staleDate?: Date
-  relevanceScore?: number
+  state: LiveActivityState;
+  staleDate?: Date;
+  relevanceScore?: number;
 }
 
 export interface LiveActivityPushToken {
-  token: string
+  token: string;
 }
 
-export type LiveActivityStyle = 'standard' | 'transient'
+export type LiveActivityStyle = "standard" | "transient";
 
 export interface LiveActivityAlertConfiguration {
-  title: string
-  body: string
-  sound: string
+  title: string;
+  body: string;
+  sound: string;
 }
 
 // TODO: Add support for after date
-export type LiveActivityDismissalPolicy = 'default' | 'immediate' | 'after'
+export type LiveActivityDismissalPolicy = "default" | "immediate" | "after";
 
 export interface PushTokenUpdateEvent {
-  activityId: string
+  activityId: string;
   /** Hex-encoded APNs token previously provided by native */
-  token: string
+  token: string;
 }
 
 export interface LiveActivitiesSupportInfo {
-  supported: boolean
-  version: number
-  comment: string
+  supported: boolean;
+  version: number;
+  comment: string;
 }
 
 export interface LiveActivityStartResult {
-  activityId: string
-  pushToken?: string
+  activityId: string;
+  pushToken?: string;
 }
 
-export interface DynamicActivities
-  extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
+export interface DynamicActivities extends HybridObject<{ ios: "swift"; android: "kotlin" }> {
   /**
    * Check if Live Activities are supported on this device
    * @returns true if Live Activities are supported, false otherwise
    */
-  areLiveActivitiesSupported(): Promise<LiveActivitiesSupportInfo>
+  areLiveActivitiesSupported(): Promise<LiveActivitiesSupportInfo>;
 
   /**
    * Start a new Live Activity
@@ -76,8 +70,8 @@ export interface DynamicActivities
 
     style?: LiveActivityStyle,
     alertConfiguration?: LiveActivityAlertConfiguration,
-    start?: Date
-  ): Promise<LiveActivityStartResult>
+    start?: Date,
+  ): Promise<LiveActivityStartResult>;
 
   /**
    * Update an existing Live Activity
@@ -91,8 +85,8 @@ export interface DynamicActivities
     activityId: string,
     content: LiveActivityContent,
     alertConfiguration?: LiveActivityAlertConfiguration,
-    timestamp?: Date
-  ): Promise<void>
+    timestamp?: Date,
+  ): Promise<void>;
 
   /**
    * End a Live Activity
@@ -104,6 +98,6 @@ export interface DynamicActivities
   endLiveActivity(
     activityId: string,
     content: LiveActivityContent,
-    dismissalPolicy?: LiveActivityDismissalPolicy
-  ): Promise<void>
+    dismissalPolicy?: LiveActivityDismissalPolicy,
+  ): Promise<void>;
 }

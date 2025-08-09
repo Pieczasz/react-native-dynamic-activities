@@ -1,0 +1,46 @@
+disabled_rules:
+  - trailing_whitespace
+  - identifier_name
+
+opt_in_rules:
+  - attributes
+  - closure_end_indentation
+  - closure_spacing
+  - empty_count
+  - explicit_init
+  - fatal_error_message
+  - file_name
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - literal_expression_end_indentation
+  - multiline_parameters
+  - nimble_operator
+  - operator_usage_whitespace
+  - private_action
+  - prohibited_interface_builder
+  - redundant_nil_coalescing
+  - sorted_imports
+  - unneeded_parentheses_in_closure_argument
+  - yoda_condition
+
+included:
+  - ios
+
+excluded:
+  - nitrogen/generated
+  - example/ios/Pods
+
+line_length:
+  warning: 120
+  error: 160
+
+type_body_length:
+  warning: 400
+  error: 800
+
+file_length:
+  warning: 1000
+  error: 2000
+
+cyclomatic_complexity:
+  ignores_case_statements: true

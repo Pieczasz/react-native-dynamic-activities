@@ -1,15 +1,11 @@
 {
   "$schema": "https://nitro.margelo.com/nitro.schema.json",
-  "cxxNamespace": [
-    "dynamicactivities"
-  ],
+  "cxxNamespace": ["dynamicactivities"],
   "ios": {
     "iosModuleName": "DynamicActivities"
   },
   "android": {
-    "androidNamespace": [
-      "dynamicactivities"
-    ],
+    "androidNamespace": ["dynamicactivities"],
     "androidCxxLibName": "DynamicActivities"
   },
   "autolinking": {
@@ -18,7 +14,5 @@
       "kotlin": "HybridDynamicActivities"
     }
   },
-  "ignorePaths": [
-    "**/node_modules"
-  ]
+  "ignorePaths": ["**/node_modules"]
 }

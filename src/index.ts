@@ -1,8 +1,8 @@
-import { NitroModules } from 'react-native-nitro-modules'
-import type { DynamicActivities as DynamicActivitiesSpec } from './specs/LiveActivities.nitro'
+import { NitroModules } from "react-native-nitro-modules";
+import type { DynamicActivities as DynamicActivitiesSpec } from "./specs/LiveActivities.nitro";
 
 export const DynamicActivities =
-  NitroModules.createHybridObject<DynamicActivitiesSpec>('DynamicActivities')
+  NitroModules.createHybridObject<DynamicActivitiesSpec>("DynamicActivities");
 
 export type {
   LiveActivityAttributes,
@@ -13,14 +13,14 @@ export type {
   LiveActivityStyle,
   LiveActivityState,
   PushTokenUpdateEvent,
-} from './specs/LiveActivities.nitro'
+} from "./specs/LiveActivities.nitro";
 
 export type {
   LiveActivityError,
   LiveActivityErrorInfo,
   LiveActivityAuthorizationError,
   LiveActivitySystemError,
-} from './specs/LiveActivitiesErrors.nitro'
+} from "./specs/LiveActivitiesErrors.nitro";
 
 export {
   LiveActivityErrorCode,
@@ -34,4 +34,4 @@ export {
   isSystemError,
   getErrorSeverity,
   LIVE_ACTIVITY_ERROR_DOMAIN,
-} from './specs/LiveActivitiesErrors.nitro'
+} from "./specs/LiveActivitiesErrors.nitro";

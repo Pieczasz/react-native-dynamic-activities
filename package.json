@@ -13,8 +13,12 @@
     "typecheck": "tsc --noEmit",
     "clean": "git clean -dfX",
     "release": "release-it",
-    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
-    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
+    "lint": "biome check --write .",
+    "lint:fix": "biome check --write .",
+    "lint:fix:unsafe": "biome check --write --unsafe .",
+    "format": "biome format --write .",
+    "lint:swift": "swiftlint",
+    "format:swift": "swiftformat . --config .swiftformat",
     "build": "bun run typecheck && bob build",
     "codegen": "nitro-codegen --logLevel=\"debug\" && bun run build && node post-script.js",
     "postcodegen": "bun --cwd example pod",
@@ -49,10 +53,7 @@
     "*.podspec",
     "README.md"
   ],
-  "workspaces": [
-    "example",
-    "docs"
-  ],
+  "workspaces": ["example", "docs"],
   "repository": "https://github.com/pieczasz/react-native-dynamic-activities.git",
   "author": "Pieczasz",
   "license": "MIT",
@@ -64,7 +65,6 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
-    "@react-native/eslint-config": "0.79.3",
     "@react-native/metro-config": "^0.80.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
@@ -72,13 +72,9 @@
     "@types/react": "^19.1.0",
     "commitlint": "^19.8.1",
     "conventional-changelog-conventionalcommits": "^9.0.0",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
     "nitro-codegen": "^0.26.3",
-    "prettier": "^3.3.3",
     "react": "19.1.0",
     "react-native": "0.80.0",
     "react-native-builder-bob": "^0.37.0",
@@ -86,46 +82,13 @@
     "release-it": "^19.0.3",
     "semantic-release": "^24.2.3",
     "ts-jest": "^29.4.0",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "@biomejs/biome": "^1.9.0"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
     "react-native-nitro-modules": "*"
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@react-native",
-      "prettier"
-    ],
-    "plugins": [
-      "prettier"
-    ],
-    "rules": {
-      "prettier/prettier": [
-        "warn",
-        {
-          "quoteProps": "consistent",
-          "singleQuote": true,
-          "tabWidth": 2,
-          "trailingComma": "es5",
-          "useTabs": false
-        }
-      ]
-    }
-  },
-  "eslintIgnore": [
-    "node_modules/",
-    "lib/"
-  ],
-  "prettier": {
-    "quoteProps": "consistent",
-    "singleQuote": true,
-    "tabWidth": 2,
-    "trailingComma": "es5",
-    "useTabs": false,
-    "semi": false
   },
   "react-native-builder-bob": {
     "source": "src",
@@ -142,9 +105,7 @@
     ]
   },
   "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
+    "extends": ["@commitlint/config-conventional"]
   },
   "release-it": {
     "npm": {

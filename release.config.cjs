@@ -1,36 +1,34 @@
 const rules = [
-  { type: 'feat', release: 'minor', title: '✨ Features' },
-  { type: 'fix', release: 'patch', title: '🐛 Bug Fixes' },
-  { type: 'perf', release: 'patch', title: '💨 Performance Improvements' },
-  { type: 'refactor', release: 'patch', title: '🔄 Code Refactors' },
-  { type: 'docs', release: 'patch', title: '📚 Documentation' },
-  { type: 'chore', release: 'patch', title: '🛠️ Other changes' },
-]
+  { type: "feat", release: "minor", title: "✨ Features" },
+  { type: "fix", release: "patch", title: "🐛 Bug Fixes" },
+  { type: "perf", release: "patch", title: "💨 Performance Improvements" },
+  { type: "refactor", release: "patch", title: "🔄 Code Refactors" },
+  { type: "docs", release: "patch", title: "📚 Documentation" },
+  { type: "chore", release: "patch", title: "🛠️ Other changes" },
+];
 
-const sortMap = Object.fromEntries(
-  rules.map((rule, index) => [rule.title, index])
-)
+const sortMap = Object.fromEntries(rules.map((rule, index) => [rule.title, index]));
 
 /**
  * @type {import('semantic-release').GlobalConfig}
  */
 module.exports = {
-  branches: ['main', { name: 'next', prerelease: 'next' }],
+  branches: ["main", { name: "next", prerelease: "next" }],
   plugins: [
     [
-      '@semantic-release/commit-analyzer',
+      "@semantic-release/commit-analyzer",
       {
-        preset: 'conventionalcommits',
+        preset: "conventionalcommits",
         releaseRules: [
-          { breaking: true, release: 'major' },
-          { revert: true, release: 'patch' },
+          { breaking: true, release: "major" },
+          { revert: true, release: "patch" },
         ].concat(rules.map(({ type, release }) => ({ type, release }))),
       },
     ],
     [
-      '@semantic-release/release-notes-generator',
+      "@semantic-release/release-notes-generator",
       {
-        preset: 'conventionalcommits',
+        preset: "conventionalcommits",
         presetConfig: {
           types: rules.map(({ type, title }) => ({
             type,
@@ -43,18 +41,18 @@ module.exports = {
       },
     ],
     [
-      '@semantic-release/changelog',
+      "@semantic-release/changelog",
       {
-        changelogFile: 'CHANGELOG.md',
+        changelogFile: "CHANGELOG.md",
       },
     ],
-    '@semantic-release/npm',
-    '@semantic-release/github',
+    "@semantic-release/npm",
+    "@semantic-release/github",
     [
-      '@semantic-release/git',
+      "@semantic-release/git",
       {
-        assets: ['package.json', 'CHANGELOG.md', 'example/package.json'],
+        assets: ["package.json", "CHANGELOG.md", "example/package.json"],
       },
     ],
   ],
-}
+};

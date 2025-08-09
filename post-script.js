@@ -6,17 +6,17 @@
  *
  * @module create-nitro-module
  */
-const path = require('node:path')
-const { writeFile, readFile } = require('node:fs/promises')
+const path = require("node:path");
+const { writeFile, readFile } = require("node:fs/promises");
 
 const androidWorkaround = async () => {
   const androidOnLoadFile = path.join(
     process.cwd(),
-    'nitrogen/generated/android',
-    'DynamicActivitiesOnLoad.cpp'
-  )
+    "nitrogen/generated/android",
+    "DynamicActivitiesOnLoad.cpp",
+  );
 
-  const str = await readFile(androidOnLoadFile, { encoding: 'utf8' })
-  await writeFile(androidOnLoadFile, str.replace(/margelo\/nitro\//g, ''))
-}
-androidWorkaround()
+  const str = await readFile(androidOnLoadFile, { encoding: "utf8" });
+  await writeFile(androidOnLoadFile, str.replace(/margelo\/nitro\//g, ""));
+};
+androidWorkaround();

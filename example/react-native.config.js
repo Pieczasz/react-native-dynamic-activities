@@ -1,7 +1,6 @@
-const path = require('node:path');
-const pkg = require('../package.json');
+const path = require("node:path");
+const pkg = require("../package.json");
 
- 
 /**
  * @type {import('@react-native-community/cli-types').Config}
  */
@@ -13,7 +12,7 @@ module.exports = {
   },
   dependencies: {
     [pkg.name]: {
-      root: path.join(__dirname, '..'),
+      root: path.join(__dirname, ".."),
     },
   },
 };
