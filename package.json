@@ -10,19 +10,27 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --project ./config/tsconfig.json --noEmit",
     "clean": "git clean -dfX",
     "release": "release-it",
-    "lint": "biome check --write .",
-    "lint:fix": "biome check --write .",
-    "lint:fix:unsafe": "biome check --write --unsafe .",
-    "format": "biome format --write .",
-    "lint:swift": "swiftlint",
-    "format:swift": "swiftformat . --config .swiftformat",
+    "lint": "biome check --config-path ./config/biome.json --write .",
+    "lint:unsafe": "biome check --config-path ./config/biome.json --write --unsafe .",
+    "format": "biome format --config-path ./config/biome.json --write .",
+    "lint:swift": "bash ./scripts/swift-lint.sh",
+    "lint:kotlin": "bash ./scripts/kotlin-lint.sh",
+    "format:swift": "bash ./scripts/swift-format.sh",
+    "format:clang": "bash ./scripts/clang-format.sh",
+    "format:native": "bun run format:swift && bun run format:clang",
+    "lint:native": "bun run lint:swift && bun run lint:kotlin",
+    "format:all": "bun run format && bun run format:native",
+    "lint:all": "bun run lint && bun run lint:native",
     "build": "bun run typecheck && bob build",
     "codegen": "nitro-codegen --logLevel=\"debug\" && bun run build && node post-script.js",
     "postcodegen": "bun --cwd example pod",
-    "prepare": "husky"
+    "prepare": "husky",
+    "create-widget": "node scripts/create-widget.js",
+    "widget:doctor": "node scripts/create-widget.js --doctor",
+    "widget:validate": "node scripts/create-widget.js --validate"
   },
   "keywords": [
     "react-native",
@@ -50,6 +58,9 @@
     "ios/**/*.cpp",
     "ios/**/*.swift",
     "app.plugin.js",
+    "scripts/create-widget.js",
+    "templates",
+    "WIDGET_SETUP.md",
     "*.podspec",
     "README.md"
   ],
@@ -64,10 +75,9 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
+    "@release-it/conventional-changelog": "^9.0.0",
     "@commitlint/config-conventional": "^17.0.2",
     "@react-native/metro-config": "^0.80.1",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
     "@types/jest": "^29.5.14",
     "@types/react": "^19.1.0",
     "commitlint": "^19.8.1",
@@ -80,7 +90,6 @@
     "react-native-builder-bob": "^0.37.0",
     "react-native-nitro-modules": "^0.26.3",
     "release-it": "^19.0.3",
-    "semantic-release": "^24.2.3",
     "ts-jest": "^29.4.0",
     "typescript": "5.0.4",
     "@biomejs/biome": "^1.9.0"
@@ -89,6 +98,9 @@
     "react": "*",
     "react-native": "*",
     "react-native-nitro-modules": "*"
+  },
+  "bin": {
+    "react-native-dynamic-activities": "./scripts/create-widget.js"
   },
   "react-native-builder-bob": {
     "source": "src",
@@ -99,7 +111,7 @@
       [
         "typescript",
         {
-          "project": "tsconfig.json"
+          "project": "config/tsconfig.json"
         }
       ]
     ]

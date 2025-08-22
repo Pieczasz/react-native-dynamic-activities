@@ -1,4 +1,9 @@
-#!/usr/bin/env sh
+#!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-bunx --no-install commitlint --edit "$1" 
+# Prefer bunx if available, fall back to npx
+if command -v bunx >/dev/null 2>&1; then
+  bunx --no -- commitlint --edit "$1"
+else
+  npx --no -- commitlint --edit "$1"
+fi

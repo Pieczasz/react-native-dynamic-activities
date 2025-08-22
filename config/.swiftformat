@@ -1,0 +1,5 @@
+--swiftversion 5.9
+--indent 2
+--wraparguments before-first
+--wrapcollections before-first
+--maxwidth 120
