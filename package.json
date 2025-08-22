@@ -100,7 +100,8 @@
     "react-native-nitro-modules": "*"
   },
   "bin": {
-    "react-native-dynamic-activities": "./scripts/create-widget.js"
+    "react-native-dynamic-activities": "./scripts/widget-cli.js",
+    "rn-dynamic-activities": "./scripts/widget-cli.js"
   },
   "react-native-builder-bob": {
     "source": "src",
