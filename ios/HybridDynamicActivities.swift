@@ -12,11 +12,10 @@ class HybridDynamicActivities: HybridDynamicActivitiesSpec {
   func areLiveActivitiesSupported() throws -> Promise<LiveActivitiesSupportInfo> {
     let promise = Promise<LiveActivitiesSupportInfo>()
     let info = LiveActivitiesService().areSupported()
-    promise.resolve(info)
+    promise.resolve(withResult: info)
     return promise
   }
 
-  // swiftlint:disable:next function_parameter_count
   func startLiveActivity(
     attributes: LiveActivityAttributes,
     content: LiveActivityContent,
@@ -37,11 +36,15 @@ class HybridDynamicActivities: HybridDynamicActivitiesSpec {
         alertConfiguration: alertConfiguration,
         start: start
       )
-      promise.resolve(result)
-    } catch let authError as ActivityAuthorizationError {
-      promise.reject(mapAuthorizationError(authError))
+      promise.resolve(withResult: result)
     } catch {
-      promise.reject(makeNSError(
+      if #available(iOS 16.2, *) {
+        if let authError = error as? ActivityAuthorizationError {
+          promise.reject(withError: mapAuthorizationError(authError))
+          return promise
+        }
+      }
+      promise.reject(withError: makeNSError(
         code: "unknownError",
         message: error.localizedDescription,
         domain: "LiveActivitySystemError"
@@ -67,11 +70,15 @@ class HybridDynamicActivities: HybridDynamicActivitiesSpec {
         alertConfiguration: alertConfiguration,
         timestamp: timestamp
       )
-      promise.resolve(())
-    } catch let authError as ActivityAuthorizationError {
-      promise.reject(mapAuthorizationError(authError))
+      promise.resolve(withResult: ())
     } catch {
-      promise.reject(makeNSError(
+      if #available(iOS 16.2, *) {
+        if let authError = error as? ActivityAuthorizationError {
+          promise.reject(withError: mapAuthorizationError(authError))
+          return promise
+        }
+      }
+      promise.reject(withError: makeNSError(
         code: "unknownError",
         message: error.localizedDescription,
         domain: "LiveActivitySystemError"
@@ -94,11 +101,15 @@ class HybridDynamicActivities: HybridDynamicActivitiesSpec {
         content: content,
         dismissalPolicy: dismissalPolicy
       )
-      promise.resolve(())
-    } catch let authError as ActivityAuthorizationError {
-      promise.reject(mapAuthorizationError(authError))
+      promise.resolve(withResult: ())
     } catch {
-      promise.reject(makeNSError(
+      if #available(iOS 16.2, *) {
+        if let authError = error as? ActivityAuthorizationError {
+          promise.reject(withError: mapAuthorizationError(authError))
+          return promise
+        }
+      }
+      promise.reject(withError: makeNSError(
         code: "unknownError",
         message: error.localizedDescription,
         domain: "LiveActivitySystemError"
