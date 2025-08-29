@@ -53,7 +53,7 @@ namespace margelo::nitro::dynamicactivities { enum class LiveActivityStyle; }
 
 // Common C++ types used in Swift
 #include <NitroModules/ArrayBufferHolder.hpp>
-#include <NitroModules/AnyMapHolder.hpp>
+#include <NitroModules/AnyMapUtils.hpp>
 #include <NitroModules/RuntimeError.hpp>
 #include <NitroModules/DateToChronoDate.hpp>
 

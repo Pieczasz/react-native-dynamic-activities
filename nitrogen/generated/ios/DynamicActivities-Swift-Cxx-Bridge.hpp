@@ -73,13 +73,13 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    */
   class Func_void_LiveActivitiesSupportInfo_Wrapper final {
   public:
-    explicit Func_void_LiveActivitiesSupportInfo_Wrapper(std::function<void(const LiveActivitiesSupportInfo& /* result */)>&& func): _function(std::make_shared<std::function<void(const LiveActivitiesSupportInfo& /* result */)>>(std::move(func))) {}
+    explicit Func_void_LiveActivitiesSupportInfo_Wrapper(std::function<void(const LiveActivitiesSupportInfo& /* result */)>&& func): _function(std::make_unique<std::function<void(const LiveActivitiesSupportInfo& /* result */)>>(std::move(func))) {}
     inline void call(LiveActivitiesSupportInfo result) const {
       _function->operator()(result);
     }
   private:
-    std::shared_ptr<std::function<void(const LiveActivitiesSupportInfo& /* result */)>> _function;
-  };
+    std::unique_ptr<std::function<void(const LiveActivitiesSupportInfo& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
   Func_void_LiveActivitiesSupportInfo create_Func_void_LiveActivitiesSupportInfo(void* _Nonnull swiftClosureWrapper);
   inline Func_void_LiveActivitiesSupportInfo_Wrapper wrap_Func_void_LiveActivitiesSupportInfo(Func_void_LiveActivitiesSupportInfo value) {
     return Func_void_LiveActivitiesSupportInfo_Wrapper(std::move(value));
@@ -95,13 +95,13 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    */
   class Func_void_std__exception_ptr_Wrapper final {
   public:
-    explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::make_shared<std::function<void(const std::exception_ptr& /* error */)>>(std::move(func))) {}
+    explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::make_unique<std::function<void(const std::exception_ptr& /* error */)>>(std::move(func))) {}
     inline void call(std::exception_ptr error) const {
       _function->operator()(error);
     }
   private:
-    std::shared_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
-  };
+    std::unique_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
+  } SWIFT_NONCOPYABLE;
   Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* _Nonnull swiftClosureWrapper);
   inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) {
     return Func_void_std__exception_ptr_Wrapper(std::move(value));
@@ -138,13 +138,13 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    */
   class Func_void_LiveActivityStartResult_Wrapper final {
   public:
-    explicit Func_void_LiveActivityStartResult_Wrapper(std::function<void(const LiveActivityStartResult& /* result */)>&& func): _function(std::make_shared<std::function<void(const LiveActivityStartResult& /* result */)>>(std::move(func))) {}
+    explicit Func_void_LiveActivityStartResult_Wrapper(std::function<void(const LiveActivityStartResult& /* result */)>&& func): _function(std::make_unique<std::function<void(const LiveActivityStartResult& /* result */)>>(std::move(func))) {}
     inline void call(LiveActivityStartResult result) const {
       _function->operator()(result);
     }
   private:
-    std::shared_ptr<std::function<void(const LiveActivityStartResult& /* result */)>> _function;
-  };
+    std::unique_ptr<std::function<void(const LiveActivityStartResult& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
   Func_void_LiveActivityStartResult create_Func_void_LiveActivityStartResult(void* _Nonnull swiftClosureWrapper);
   inline Func_void_LiveActivityStartResult_Wrapper wrap_Func_void_LiveActivityStartResult(Func_void_LiveActivityStartResult value) {
     return Func_void_LiveActivityStartResult_Wrapper(std::move(value));
@@ -217,13 +217,13 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    */
   class Func_void_Wrapper final {
   public:
-    explicit Func_void_Wrapper(std::function<void()>&& func): _function(std::make_shared<std::function<void()>>(std::move(func))) {}
+    explicit Func_void_Wrapper(std::function<void()>&& func): _function(std::make_unique<std::function<void()>>(std::move(func))) {}
     inline void call() const {
       _function->operator()();
     }
   private:
-    std::shared_ptr<std::function<void()>> _function;
-  };
+    std::unique_ptr<std::function<void()>> _function;
+  } SWIFT_NONCOPYABLE;
   Func_void create_Func_void(void* _Nonnull swiftClosureWrapper);
   inline Func_void_Wrapper wrap_Func_void(Func_void value) {
     return Func_void_Wrapper(std::move(value));

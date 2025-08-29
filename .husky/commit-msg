@@ -1,6 +1,3 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 # Prefer bunx if available, fall back to npx
 if command -v bunx >/dev/null 2>&1; then
   bunx --no -- commitlint --edit "$1"
