@@ -31,6 +31,7 @@
     "create-widget": "node scripts/create-widget.js",
     "widget:doctor": "node scripts/create-widget.js --doctor",
     "widget:validate": "node scripts/create-widget.js --validate",
+    "project:clean": "pkill -f Xcode || true && rm -rf node_modules lib nitrogen example/node_modules example/Pods example/Podfile.lock example/build ~/Library/Developer/Xcode/DerivedData && bun install && bun run codegen && cd example && bun install && cd ios && pod install && xed . && cd .. && cd ..",
     "ios:clean": "cd example/ios && rm -rf Pods Podfile.lock build && rm -rf ~/Library/Developer/Xcode/DerivedData"
   },
   "keywords": [
@@ -59,7 +60,7 @@
     "ios/**/*.cpp",
     "ios/**/*.swift",
     "app.plugin.js",
-    "scripts/create-widget.js",
+    "scripts/cli.js",
     "templates",
     "WIDGET_SETUP.md",
     "*.podspec",
@@ -76,24 +77,28 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@release-it/conventional-changelog": "^9.0.0",
+    "@biomejs/biome": "^1.9.0",
     "@commitlint/config-conventional": "^17.0.2",
     "@react-native/metro-config": "^0.80.1",
+    "@release-it/conventional-changelog": "^9.0.0",
     "@types/jest": "^29.5.14",
+    "@types/node": "^24.3.0",
     "@types/react": "^19.1.0",
+    "chalk": "^5.6.0",
+    "commander": "^14.0.0",
     "commitlint": "^19.8.1",
     "conventional-changelog-conventionalcommits": "^9.0.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
-    "nitro-codegen": "^0.26.4",
+    "nitro-codegen": "^0.29.1",
     "react": "19.1.0",
     "react-native": "0.80.0",
     "react-native-builder-bob": "^0.37.0",
-    "react-native-nitro-modules": "^0.26.4",
+    "react-native-nitro-modules": "^0.29.1",
     "release-it": "^19.0.3",
     "ts-jest": "^29.4.0",
-    "typescript": "5.0.4",
-    "@biomejs/biome": "^1.9.0"
+    "ts-node": "^10.9.2",
+    "typescript": "5.0.4"
   },
   "peerDependencies": {
     "react": "*",
@@ -101,8 +106,8 @@
     "react-native-nitro-modules": "*"
   },
   "bin": {
-    "react-native-dynamic-activities": "./scripts/widget-cli.js",
-    "rn-dynamic-activities": "./scripts/widget-cli.js"
+    "react-native-dynamic-activities": "./scripts/cli.js",
+    "rn-dynamic-activities": "./scripts/cli.js"
   },
   "react-native-builder-bob": {
     "source": "src",

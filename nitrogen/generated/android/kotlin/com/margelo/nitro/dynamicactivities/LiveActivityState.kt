@@ -15,14 +15,10 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @DoNotStrip
 @Keep
-enum class LiveActivityState {
-  ACTIVE,
-  DISMISSED,
-  PENDING,
-  STALE,
-  ENDED;
-
-  @DoNotStrip
-  @Keep
-  private val _ordinal = ordinal
+enum class LiveActivityState(@DoNotStrip @Keep val value: Int) {
+  ACTIVE(0),
+  DISMISSED(1),
+  PENDING(2),
+  STALE(3),
+  ENDED(4);
 }

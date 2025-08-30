@@ -54,7 +54,7 @@ abstract class HybridDynamicActivitiesSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun endLiveActivity(activityId: String, content: LiveActivityContent, dismissalPolicy: LiveActivityDismissalPolicy?): Promise<Unit>
+  abstract fun endLiveActivity(activityId: String, content: LiveActivityContent, dismissalPolicy: LiveActivityDismissalPolicy?, timestamp: java.time.Instant?): Promise<Unit>
 
   private external fun initHybrid(): HybridData
 

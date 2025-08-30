@@ -2,97 +2,71 @@ import ActivityKit
 import Foundation
 import NitroModules
 
-// MARK: - ActivityKit Bridge Protocol
+// MARK: - Generic Activity Attributes
 
 /**
- * Protocol that user-generated widgets must implement to bridge with the library.
- *
- * The CLI generates implementations of this protocol for each widget extension,
- * allowing the library to delegate ActivityKit operations to user-specific code
- * while maintaining type safety and proper error handling.
- *
- * **Generated Implementation Location:**
- * Widget Extension Target → `[WidgetName]ActivityAttributes.swift`
+ * Generic attributes that can be used with ActivityKit for simple Live Activities.
+ * This eliminates the need for user-specific attribute types in most cases.
  */
-protocol LiveActivityBridge {
-  static func startActivity(
-    attributes: LiveActivityAttributes,
-    content: LiveActivityContent,
-    pushToken: LiveActivityPushToken?,
-    style: LiveActivityStyle?,
-    alertConfiguration: LiveActivityAlertConfiguration?,
-    start: Date?
-  ) throws -> LiveActivityStartResult
+struct GenericActivityAttributes: ActivityAttributes {
+  public struct ContentState: Codable, Hashable {
+    /// Current state of the activity
+    var state: String
 
-  static func updateActivity(
-    activityId: String,
-    content: LiveActivityContent,
-    alertConfiguration: LiveActivityAlertConfiguration?,
-    timestamp: Date?
-  ) throws
+    /// Optional relevance score for Dynamic Island priority (0.0 - 1.0)
+    var relevanceScore: Double?
 
-  static func endActivity(
-    activityId: String,
-    content: LiveActivityContent,
-    dismissalPolicy: LiveActivityDismissalPolicy?
-  ) throws
-}
+    /// Optional timestamp for the state change
+    var timestamp: Date?
 
-// MARK: - Bridge Registry
-
-/**
- * Registry for user-implemented widget bridges.
- *
- * **Usage Pattern:**
- * 1. User implements `LiveActivityBridge` protocol in their widget extension
- * 2. User calls `LiveActivityBridgeRegistry.shared.registerBridge(MyWidgetAttributes.self)`
- *    in their AppDelegate or main app initialization
- * 3. Library delegates all ActivityKit operations to the registered implementation
- *
- * **Thread Safety:** This registry is designed for single registration during app launch.
- */
-final class LiveActivityBridgeRegistry {
-  // MARK: - Properties
-
-  static let shared = LiveActivityBridgeRegistry()
-  private var bridgeClass: LiveActivityBridge.Type?
-
-  private let queue = DispatchQueue(label: "com.dynamicactivities.bridge-registry", qos: .userInitiated)
-
-  // MARK: - Initialization
-
-  private init() {}
-
-  // MARK: - Public API
-
-  /**
-   * Registers a user-implemented bridge for ActivityKit operations.
-   *
-   * - Parameter bridgeClass: The bridge implementation class
-   * - Important: Should be called once during app initialization
-   */
-  func registerBridge(_ bridgeClass: LiveActivityBridge.Type) {
-    queue.async { [weak self] in
-      self?.bridgeClass = bridgeClass
+    public init(state: String, relevanceScore: Double? = nil, timestamp: Date? = nil) {
+      self.state = state
+      self.relevanceScore = relevanceScore
+      self.timestamp = timestamp
     }
   }
 
-  /**
-   * Retrieves the registered bridge implementation.
-   *
-   * - Returns: The registered bridge class
-   * - Throws: `LiveActivitySystemError` if no bridge is registered
-   */
-  func getBridge() throws -> LiveActivityBridge.Type {
-    try queue.sync { [weak self] in
-      guard let bridge = self?.bridgeClass else {
-        throw makeNSError(
-          code: "noBridge",
-          message: "No ActivityKit bridge registered. Ensure you call LiveActivityBridgeRegistry.shared.registerBridge() during app initialization.",
-          domain: "LiveActivitySystemError"
-        )
-      }
-      return bridge
+  /// Activity title
+  var title: String
+
+  /// Activity description/body text
+  var body: String
+
+  public init(title: String, body: String) {
+    self.title = title
+    self.body = body
+  }
+}
+
+// MARK: - Activity Registry
+
+/**
+ * Registry for tracking active Live Activities.
+ */
+private final class ActivityRegistry {
+  static let shared = ActivityRegistry()
+  private var activities: [String: Any] = [:] // Any to support different Activity types
+  private let queue = DispatchQueue(label: "com.dynamicactivities.registry", qos: .userInitiated)
+
+  private init() {}
+
+  @available(iOS 16.1, *)
+  func registerActivity(_ activity: Activity<some ActivityAttributes>) {
+    queue.async { [weak self] in
+      self?.activities[activity.id] = activity
+    }
+  }
+
+  @available(iOS 16.1, *)
+  func getActivity<T: ActivityAttributes>(id: String, type _: T.Type) -> Activity<T>? {
+    queue.sync { [weak self] in
+      return self?.activities[id] as? Activity<T>
+    }
+  }
+
+  func removeActivity(id: String) {
+    queue.async { [weak self] in
+      self?.activities.removeValue(forKey: id)
     }
   }
 }
@@ -103,20 +77,16 @@ final class LiveActivityBridgeRegistry {
  * Core service layer for ActivityKit operations.
  *
  * **Architecture:**
- * - Pure Swift service layer (no Nitro dependencies)
- * - Delegates actual ActivityKit calls to user-registered bridge implementations
+ * - Pure Swift service layer with direct ActivityKit integration
+ * - Uses generic attributes that work for most use cases
  * - Handles iOS version compatibility and authorization checks
- * - Error handling is delegated to bridge implementations and error mapping layer
- *
- * **Design Pattern:**
- * This service acts as a coordinator that validates preconditions and delegates
- * to user-specific bridge implementations, maintaining separation of concerns.
+ * - Complete activity lifecycle management (start, update, end)
  */
 final class LiveActivitiesService {
   // MARK: - Properties
 
-  /// Bridge registry for delegating operations
-  private let bridgeRegistry = LiveActivityBridgeRegistry.shared
+  /// Activity registry for tracking live activities
+  private let activityRegistry = ActivityRegistry.shared
 
   // MARK: - Support Detection
 
@@ -136,19 +106,19 @@ final class LiveActivitiesService {
       LiveActivitiesSupportInfo(
         supported: ActivityAuthorizationInfo().areActivitiesEnabled,
         version: 18.0,
-        comment: "Limited: no alertConfiguration/start parameters in requests"
+        comment: "Limited: no alertConfiguration/start parameters in requests (available in iOS 26.0+)"
       )
     } else if #available(iOS 17.2, *) {
       LiveActivitiesSupportInfo(
         supported: ActivityAuthorizationInfo().areActivitiesEnabled,
         version: 17.2,
-        comment: "Limited: no style parameter and timestamp support only for updates"
+        comment: "Limited: no style parameter (iOS 18.0+) or alertConfiguration/start in requests (iOS 26.0+)"
       )
     } else if #available(iOS 16.2, *) {
       LiveActivitiesSupportInfo(
         supported: ActivityAuthorizationInfo().areActivitiesEnabled,
         version: 16.2,
-        comment: "Basic support: no advanced parameters or timestamp support"
+        comment: "Basic support: no style, timestamp (iOS 17.2+), or alertConfiguration/start in requests (iOS 26.0+)"
       )
     } else if #available(iOS 16.1, *) {
       LiveActivitiesSupportInfo(
@@ -173,7 +143,7 @@ final class LiveActivitiesService {
    * **Validation Flow:**
    * 1. Checks iOS version compatibility (≥16.2)
    * 2. Verifies user authorization for Live Activities
-   * 3. Delegates to registered bridge implementation
+   * 3. Creates ActivityKit activity directly
    *
    * - Parameters:
    *   - attributes: Activity attributes (title, body, metadata)
@@ -188,9 +158,9 @@ final class LiveActivitiesService {
   func startActivity(
     attributes: LiveActivityAttributes,
     content: LiveActivityContent,
-    pushToken: LiveActivityPushToken?,
-    style: LiveActivityStyle?,
-    alertConfiguration: LiveActivityAlertConfiguration?,
+    pushToken _: LiveActivityPushToken?,
+    style _: LiveActivityStyle?,
+    alertConfiguration _: LiveActivityAlertConfiguration?,
     start: Date?
   ) throws -> LiveActivityStartResult {
     // Version compatibility check
@@ -201,16 +171,57 @@ final class LiveActivitiesService {
     // User authorization check
     try validateUserAuthorization()
 
-    // Delegate to user-implemented bridge
-    let bridge = try bridgeRegistry.getBridge()
-    return try bridge.startActivity(
-      attributes: attributes,
-      content: content,
-      pushToken: pushToken,
-      style: style,
-      alertConfiguration: alertConfiguration,
-      start: start
+    // Convert to generic attributes
+    let genericAttributes = GenericActivityAttributes(
+      title: attributes.title,
+      body: attributes.body
     )
+
+    let contentState = GenericActivityAttributes.ContentState(
+      state: content.state.stringValue,
+      relevanceScore: content.relevanceScore,
+      timestamp: start ?? Date()
+    )
+
+    // Create ActivityKit request
+    do {
+      let activity: Activity<GenericActivityAttributes>
+      if #available(iOS 16.2, *) {
+        activity = try Activity.request(
+          attributes: genericAttributes,
+          content: .init(state: contentState, staleDate: content.staleDate)
+        )
+      } else {
+        throw unsupportedVersionError()
+      }
+
+      // Register for tracking
+      activityRegistry.registerActivity(activity)
+
+      // Extract push token as hex if available
+      var hexToken: String?
+      if let tokenData = activity.pushToken {
+        hexToken = tokenData.map { String(format: "%02x", $0) }.joined()
+      }
+
+      return LiveActivityStartResult(activityId: activity.id, pushToken: hexToken)
+    } catch let authError as ActivityAuthorizationError {
+      if #available(iOS 16.1, *) {
+        throw mapAuthorizationError(authError)
+      } else {
+        throw makeNSError(
+          code: "unknownError",
+          message: authError.localizedDescription,
+          domain: "LiveActivitySystemError"
+        )
+      }
+    } catch {
+      throw makeNSError(
+        code: "unknownError",
+        message: error.localizedDescription,
+        domain: "LiveActivitySystemError"
+      )
+    }
   }
 
   /**
@@ -221,25 +232,45 @@ final class LiveActivitiesService {
    *   - content: New content state
    *   - alertConfiguration: Optional alert for the update
    *   - timestamp: Custom timestamp (iOS 17.2+)
-   * - Throws: System or bridge implementation errors
+   * - Throws: System or activity not found errors
    */
   func updateActivity(
     activityId: String,
     content: LiveActivityContent,
-    alertConfiguration: LiveActivityAlertConfiguration?,
+    alertConfiguration _: LiveActivityAlertConfiguration?,
     timestamp: Date?
   ) throws {
     guard #available(iOS 16.2, *) else {
       throw unsupportedVersionError()
     }
 
-    let bridge = try bridgeRegistry.getBridge()
-    try bridge.updateActivity(
-      activityId: activityId,
-      content: content,
-      alertConfiguration: alertConfiguration,
-      timestamp: timestamp
+    guard let activity = activityRegistry.getActivity(id: activityId, type: GenericActivityAttributes.self) else {
+      throw makeNSError(
+        code: "notFound",
+        message: "Activity with ID \(activityId) not found",
+        domain: "LiveActivitySystemError"
+      )
+    }
+
+    let newState = GenericActivityAttributes.ContentState(
+      state: content.state.stringValue,
+      relevanceScore: content.relevanceScore,
+      timestamp: timestamp ?? Date()
     )
+
+    if #available(iOS 17.2, *), let timestamp {
+      Task {
+        await activity.update(
+          .init(state: newState, staleDate: content.staleDate),
+          alertConfiguration: nil,
+          timestamp: timestamp
+        )
+      }
+    } else {
+      Task {
+        await activity.update(.init(state: newState, staleDate: content.staleDate))
+      }
+    }
   }
 
   /**
@@ -249,23 +280,52 @@ final class LiveActivitiesService {
    *   - activityId: The ID of the activity to end
    *   - content: Final content state
    *   - dismissalPolicy: How the activity should be dismissed
-   * - Throws: System or bridge implementation errors
+   *   - timestamp: Custom timestamp (iOS 17.2+)
+   * - Throws: System or activity not found errors
    */
   func endActivity(
     activityId: String,
     content: LiveActivityContent,
-    dismissalPolicy: LiveActivityDismissalPolicy?
+    dismissalPolicy _: LiveActivityDismissalPolicy?,
+    timestamp: Date?
   ) throws {
     guard #available(iOS 16.2, *) else {
       throw unsupportedVersionError()
     }
 
-    let bridge = try bridgeRegistry.getBridge()
-    try bridge.endActivity(
-      activityId: activityId,
-      content: content,
-      dismissalPolicy: dismissalPolicy
+    guard let activity = activityRegistry.getActivity(id: activityId, type: GenericActivityAttributes.self) else {
+      throw makeNSError(
+        code: "notFound",
+        message: "Activity with ID \(activityId) not found",
+        domain: "LiveActivitySystemError"
+      )
+    }
+
+    let finalState = GenericActivityAttributes.ContentState(
+      state: "ended",
+      relevanceScore: content.relevanceScore,
+      timestamp: timestamp ?? Date()
     )
+
+    // Convert dismissalPolicy - ActivityKit uses different enum
+    let policy: ActivityUIDismissalPolicy = .default // Simple mapping for now
+
+    if #available(iOS 17.2, *), let timestamp {
+      Task {
+        await activity.end(
+          .init(state: finalState, staleDate: content.staleDate),
+          dismissalPolicy: policy,
+          timestamp: timestamp
+        )
+      }
+    } else {
+      Task {
+        await activity.end(.init(state: finalState, staleDate: content.staleDate), dismissalPolicy: policy)
+      }
+    }
+
+    // Clean up from registry
+    activityRegistry.removeActivity(id: activityId)
   }
 }
 
@@ -294,12 +354,15 @@ private extension LiveActivitiesService {
   }
 }
 
+// MARK: - Error Mapping Helpers
+// (Centralized in ios/Errors/ErrorMapping.swift)
+
 // MARK: - Data Extensions
 
 /**
  * Utility extension for converting hex strings to Data.
  *
- * Used for processing push tokens in ActivityKit bridge implementations.
+ * Used for processing push tokens in ActivityKit implementations.
  */
 private extension Data {
   /**

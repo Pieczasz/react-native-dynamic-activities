@@ -1,141 +1,119 @@
-#!/usr/bin/env node
+#!/usr/bin/env ts-node
 
-const fs = require("node:fs");
-const path = require("node:path");
+/**
+ * React Native Dynamic Activities - Modern TypeScript CLI
+ *
+ * A simplified, type-safe CLI for Live Activities widget creation.
+ */
 
-// Color output helpers
-const colors = {
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  red: "\x1b[31m",
-  blue: "\x1b[34m",
-  bold: "\x1b[1m",
-  reset: "\x1b[0m",
-};
+import * as fs from "node:fs";
+import * as path from "node:path";
+import chalk from "chalk";
+import { program } from "commander";
 
-const log = {
-  info: (msg) => console.log(`${colors.blue}ℹ${colors.reset} ${msg}`),
-  success: (msg) => console.log(`${colors.green}✓${colors.reset} ${msg}`),
-  warning: (msg) => console.log(`${colors.yellow}⚠${colors.reset} ${msg}`),
-  error: (msg) => console.log(`${colors.red}✗${colors.reset} ${msg}`),
-  title: (msg) => console.log(`\n${colors.bold}${colors.blue}${msg}${colors.reset}\n`),
-};
+interface WidgetConfig {
+  widgetName: string;
+  bundleId: string;
+  activityName: string;
+  projectRoot: string;
+  iosDir: string;
+}
 
-class WidgetScaffolder {
+class DynamicActivitiesCLI {
+  private projectRoot: string;
+  private iosDir: string;
+
   constructor() {
     this.projectRoot = process.cwd();
     this.iosDir = path.join(this.projectRoot, "ios");
-    this.templatesDir = path.join(__dirname, "..", "templates");
   }
 
-  async run() {
-    try {
-      log.title("🚀 React Native Dynamic Activities - Widget Scaffolder");
-
-      // Validate environment
-      await this.validateEnvironment();
-
-      // Get user input
-      const config = await this.getUserInput();
-
-      // Generate widget files
-      await this.generateWidget(config);
-
-      // Update Xcode project
-      await this.updateXcodeProject(config);
-
-      // Success message
-      this.showCompletionMessage(config);
-    } catch (error) {
-      log.error(`Failed to create widget: ${error.message}`);
-      process.exit(1);
-    }
-  }
-
-  async validateEnvironment() {
-    log.info("Validating environment...");
-
-    // Check if we're in a React Native project
+  /**
+   * Validates the development environment
+   */
+  private validateEnvironment(): void {
     if (!fs.existsSync(path.join(this.projectRoot, "package.json"))) {
       throw new Error("Not in a React Native project root");
     }
 
-    // Check if iOS directory exists
     if (!fs.existsSync(this.iosDir)) {
       throw new Error("iOS directory not found. Run this from your React Native project root.");
     }
 
-    // Check for Xcode project
     const iosContents = fs.readdirSync(this.iosDir);
     const xcodeproj = iosContents.find((item) => item.endsWith(".xcodeproj"));
 
     if (!xcodeproj) {
       throw new Error("No Xcode project found in ios/ directory");
     }
-
-    this.xcodeprojPath = path.join(this.iosDir, xcodeproj);
-    this.projectName = xcodeproj.replace(".xcodeproj", "");
-
-    log.success("Environment validation passed");
   }
 
-  async getUserInput() {
-    // For now, use defaults. In a real implementation, you'd use inquirer or similar
-    const config = {
-      widgetName: this.getWidgetName(),
-      bundleId: this.getBundleId(),
-      activityName: this.getActivityName(),
+  /**
+   * Gets widget configuration from command line args or defaults
+   */
+  private getWidgetConfig(name?: string): WidgetConfig {
+    const widgetName = name || "ExampleWidget";
+    const activityName = `${widgetName.replace("Widget", "")}Activity`;
+
+    return {
+      widgetName,
+      bundleId: `com.${this.getProjectName().toLowerCase()}.${widgetName.toLowerCase()}`,
+      activityName,
+      projectRoot: this.projectRoot,
+      iosDir: this.iosDir,
     };
-
-    log.info("Widget Configuration:");
-    log.info(`  Widget Name: ${config.widgetName}`);
-    log.info(`  Bundle ID: ${config.bundleId}`);
-    log.info(`  Activity Name: ${config.activityName}`);
-
-    return config;
   }
 
-  getWidgetName() {
-    // Extract from command line args or use default
-    const args = process.argv.slice(2);
-    const nameArg = args.find((arg) => arg.startsWith("--name="));
-    return nameArg ? nameArg.split("=")[1] : `${this.projectName}Widget`;
+  /**
+   * Gets project name from package.json
+   */
+  private getProjectName(): string {
+    const packageJson = JSON.parse(
+      fs.readFileSync(path.join(this.projectRoot, "package.json"), "utf8"),
+    );
+    return packageJson.name || "MyProject";
   }
 
-  getBundleId() {
-    const args = process.argv.slice(2);
-    const bundleArg = args.find((arg) => arg.startsWith("--bundle-id="));
-    return bundleArg
-      ? bundleArg.split("=")[1]
-      : `com.example.${this.projectName.toLowerCase()}.widget`;
-  }
+  /**
+   * Creates a new widget with all necessary files
+   */
+  async createWidget(name?: string): Promise<void> {
+    try {
+      console.log(chalk.blue.bold("\n🚀 React Native Dynamic Activities - Widget Creator\n"));
 
-  getActivityName() {
-    const args = process.argv.slice(2);
-    const activityArg = args.find((arg) => arg.startsWith("--activity="));
-    return activityArg ? activityArg.split("=")[1] : "DefaultActivity";
-  }
+      this.validateEnvironment();
+      const config = this.getWidgetConfig(name);
 
-  async generateWidget(config) {
-    log.info("Generating widget files...");
+      console.log(chalk.cyan("Creating widget with configuration:"));
+      console.log(`  Widget Name: ${config.widgetName}`);
+      console.log(`  Bundle ID: ${config.bundleId}`);
+      console.log(`  Activity Name: ${config.activityName}\n`);
 
-    const widgetDir = path.join(this.iosDir, config.widgetName);
+      const widgetDir = path.join(this.iosDir, config.widgetName);
 
-    // Create widget directory
-    if (!fs.existsSync(widgetDir)) {
-      fs.mkdirSync(widgetDir, { recursive: true });
+      // Create widget directory
+      if (!fs.existsSync(widgetDir)) {
+        fs.mkdirSync(widgetDir, { recursive: true });
+      }
+
+      // Generate all widget files
+      this.generateWidgetBundle(widgetDir, config);
+      this.generateLiveActivity(widgetDir, config);
+      this.generateActivityAttributes(widgetDir, config);
+      this.generateInfoPlist(widgetDir, config);
+
+      console.log(chalk.green("✓ Widget files generated successfully!"));
+      this.showCompletionMessage(config);
+    } catch (error) {
+      console.error(chalk.red(`✗ Failed to create widget: ${error.message}`));
+      process.exit(1);
     }
-
-    // Generate Swift files
-    await this.generateWidgetBundle(widgetDir, config);
-    await this.generateLiveActivity(widgetDir, config);
-    await this.generateActivityAttributes(widgetDir, config);
-    await this.generateInfoPlist(widgetDir, config);
-
-    log.success(`Widget files generated in ${widgetDir}`);
   }
 
-  async generateWidgetBundle(widgetDir, config) {
+  /**
+   * Generates the widget bundle file
+   */
+  private generateWidgetBundle(widgetDir: string, config: WidgetConfig): void {
     const template = `import SwiftUI
 import WidgetKit
 
@@ -146,11 +124,13 @@ struct ${config.widgetName}Bundle: WidgetBundle {
     }
 }
 `;
-
     fs.writeFileSync(path.join(widgetDir, `${config.widgetName}Bundle.swift`), template);
   }
 
-  async generateLiveActivity(widgetDir, config) {
+  /**
+   * Generates the Live Activity SwiftUI view
+   */
+  private generateLiveActivity(widgetDir: string, config: WidgetConfig): void {
     const template = `import ActivityKit
 import SwiftUI
 import WidgetKit
@@ -163,21 +143,18 @@ struct ${config.activityName}LiveActivity: Widget {
                 HStack {
                     Text(context.attributes.title)
                         .font(.headline)
-                        .foregroundColor(.primary)
+                        .fontWeight(.semibold)
                     Spacer()
                     Text(context.state.state.capitalized)
                         .font(.caption)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(context.state.state == "active" ? Color.green : Color.gray)
-                        )
-                        .foregroundColor(.white)
+                        .background(Color.blue.opacity(0.2))
+                        .cornerRadius(8)
                 }
                 
                 Text(context.attributes.body)
-                    .font(.body)
+                    .font(.subheadline)
                     .foregroundColor(.secondary)
                 
                 if let relevanceScore = context.state.relevanceScore {
@@ -187,16 +164,17 @@ struct ${config.activityName}LiveActivity: Widget {
                         Spacer()
                         Text("\\(Int(relevanceScore * 100))%")
                             .font(.caption)
-                            .fontWeight(.semibold)
+                            .fontWeight(.medium)
                     }
                     
                     ProgressView(value: relevanceScore)
                         .progressViewStyle(LinearProgressViewStyle(tint: .blue))
+                        .scaleEffect(y: 0.5)
                 }
             }
             .padding()
             .background(
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: 12)
                     .fill(Color(.systemBackground))
             )
         } dynamicIsland: { context in
@@ -255,7 +233,7 @@ struct ${config.activityName}LiveActivity: Widget {
     }
 }
 
-// Preview
+// MARK: - Previews
 #if DEBUG
 struct ${config.activityName}LiveActivity_Previews: PreviewProvider {
     static let attributes = ${config.activityName}Attributes(
@@ -284,11 +262,13 @@ struct ${config.activityName}LiveActivity_Previews: PreviewProvider {
 }
 #endif
 `;
-
     fs.writeFileSync(path.join(widgetDir, `${config.activityName}LiveActivity.swift`), template);
   }
 
-  async generateActivityAttributes(widgetDir, config) {
+  /**
+   * Generates the Activity Attributes
+   */
+  private generateActivityAttributes(widgetDir: string, config: WidgetConfig): void {
     const template = `import ActivityKit
 import Foundation
 
@@ -361,13 +341,14 @@ extension ${config.activityName}Attributes {
         )
     }
 }
-
 `;
-
     fs.writeFileSync(path.join(widgetDir, `${config.activityName}Attributes.swift`), template);
   }
 
-  async generateInfoPlist(widgetDir, config) {
+  /**
+   * Generates Info.plist
+   */
+  private generateInfoPlist(widgetDir: string, config: WidgetConfig): void {
     const template = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -400,70 +381,79 @@ extension ${config.activityName}Attributes {
 </dict>
 </plist>
 `;
-
     fs.writeFileSync(path.join(widgetDir, "Info.plist"), template);
   }
 
-  async updateXcodeProject(config) {
-    log.info("Updating Xcode project...");
+  /**
+   * Shows completion message with next steps
+   */
+  private showCompletionMessage(config: WidgetConfig): void {
+    console.log(chalk.green.bold("\n🎉 Widget Extension Created Successfully!\n"));
 
-    // Note: In a real implementation, you'd use xcode-project manipulation
-    // For now, we'll provide manual instructions
-    log.warning("Xcode project update requires manual steps (see completion message)");
-  }
+    console.log(chalk.green("Generated Files:"));
+    console.log(`  ${config.widgetName}Bundle.swift`);
+    console.log(`  ${config.activityName}LiveActivity.swift`);
+    console.log(`  ${config.activityName}Attributes.swift`);
+    console.log("  Info.plist\n");
 
-  showCompletionMessage(config) {
-    log.title("🎉 Widget Extension Created Successfully!");
-
-    console.log(`${colors.green}Generated Files:${colors.reset}`);
-    console.log(`${config.widgetName}Bundle.swift`);
-    console.log(`${config.activityName}LiveActivity.swift`);
-    console.log(`${config.activityName}Attributes.swift`);
-    console.log("Info.plist");
-
-    console.log(`\n${colors.yellow}Manual Xcode Setup Required:${colors.reset}`);
+    console.log(chalk.yellow("Manual Xcode Setup Required:"));
     console.log("1. Open your project in Xcode");
-    console.log("2. File -> New -> Target...");
-    console.log(`3. Select "Widget Extension" -> Next`);
+    console.log("2. File → New → Target...");
+    console.log('3. Select "Widget Extension" → Next');
     console.log(`4. Product Name: ${config.widgetName}`);
     console.log(`5. Bundle Identifier: ${config.bundleId}`);
-    console.log(`6. Check "Include Live Activity" if available`);
+    console.log('6. Check "Include Live Activity" if available');
     console.log("7. Click Finish");
-    console.log(`8. Replace generated files with the ones created in ios/${config.widgetName}/`);
-    console.log(`9. Add "Live Activities" capability to your main app target`);
+    console.log(`8. Replace generated files with the ones in ios/${config.widgetName}/`);
+    console.log('9. Add "Live Activities" capability to your main app target\n');
 
-    console.log(`\n${colors.blue}Usage in React Native:${colors.reset}`);
-    console.log("```typescript");
-    console.log(`import { DynamicActivities } from 'react-native-dynamic-activities';`);
-    console.log("");
-    console.log(`// Your attributes should match ${config.activityName}Attributes`);
-    console.log("const attributes = {");
-    console.log(`  title: "My Activity",`);
-    console.log(`  body: "Activity description"`);
-    console.log("};");
-    console.log("");
-    console.log("const content = {");
-    console.log(`  state: "active",`);
-    console.log("  relevanceScore: 1.0");
-    console.log("};");
-    console.log("");
-    console.log("const result = await DynamicActivities.startLiveActivity(attributes, content);");
-    console.log("```");
+    console.log(chalk.blue("Usage in React Native:"));
+    console.log(chalk.gray("```typescript"));
+    console.log(chalk.gray(`import { DynamicActivities } from 'react-native-dynamic-activities';`));
+    console.log(chalk.gray(""));
+    console.log(chalk.gray(`// Your attributes should match ${config.activityName}Attributes`));
+    console.log(chalk.gray("const attributes = {"));
+    console.log(chalk.gray('  title: "My Activity",'));
+    console.log(chalk.gray('  body: "Activity description"'));
+    console.log(chalk.gray("};"));
+    console.log(chalk.gray(""));
+    console.log(chalk.gray("const content = {"));
+    console.log(chalk.gray('  state: "active",'));
+    console.log(chalk.gray("  relevanceScore: 1.0"));
+    console.log(chalk.gray("};"));
+    console.log(chalk.gray(""));
+    console.log(
+      chalk.gray("const result = await DynamicActivities.startLiveActivity(attributes, content);"),
+    );
+    console.log(chalk.gray("```\n"));
 
-    console.log(`\n${colors.green}Next Steps:${colors.reset}`);
-    console.log(`• Test on a physical device (Live Activities don't work in Simulator)`);
+    console.log(chalk.green("Next Steps:"));
+    console.log("• Test on a physical device (Live Activities don't work in Simulator)");
     console.log(`• Customize the UI in ${config.activityName}LiveActivity.swift`);
     console.log("• Update your TypeScript types to match Swift ActivityAttributes");
   }
 }
 
-// CLI execution
-if (require.main === module) {
-  const scaffolder = new WidgetScaffolder();
-  scaffolder.run().catch((error) => {
-    console.error("Error:", error.message);
-    process.exit(1);
-  });
-}
+// CLI Setup
+program
+  .name("dynamic-activities")
+  .description("React Native Dynamic Activities CLI")
+  .version("1.0.0");
 
-module.exports = WidgetScaffolder;
+program
+  .command("create [name]")
+  .description("Create a new Live Activity widget")
+  .action(async (name?: string) => {
+    const cli = new DynamicActivitiesCLI();
+    await cli.createWidget(name);
+  });
+
+program
+  .command("help")
+  .description("Show help information")
+  .action(() => {
+    program.help();
+  });
+
+// Parse command line arguments
+program.parse();

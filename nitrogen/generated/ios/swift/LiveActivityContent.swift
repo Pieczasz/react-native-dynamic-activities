@@ -49,7 +49,8 @@ public extension LiveActivityContent {
     @inline(__always)
     get {
       return { () -> Date? in
-        if let __unwrapped = self.__staleDate.value {
+        if bridge.has_value_std__optional_std__chrono__system_clock__time_point_(self.__staleDate) {
+          let __unwrapped = bridge.get_std__optional_std__chrono__system_clock__time_point_(self.__staleDate)
           return Date(fromChrono: __unwrapped)
         } else {
           return nil

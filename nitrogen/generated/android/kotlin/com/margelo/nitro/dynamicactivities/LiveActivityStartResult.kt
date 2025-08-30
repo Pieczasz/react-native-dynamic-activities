@@ -11,6 +11,7 @@ import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.*
 
+
 /**
  * Represents the JavaScript object/struct "LiveActivityStartResult".
  */
@@ -20,7 +21,11 @@ data class LiveActivityStartResult
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val activityId: String,
+    @DoNotStrip
+    @Keep
     val pushToken: String?
   ) {
   /* main constructor */

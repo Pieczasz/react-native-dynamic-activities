@@ -43,7 +43,8 @@ public extension LiveActivityStartResult {
     @inline(__always)
     get {
       return { () -> String? in
-        if let __unwrapped = self.__pushToken.value {
+        if bridge.has_value_std__optional_std__string_(self.__pushToken) {
+          let __unwrapped = bridge.get_std__optional_std__string_(self.__pushToken)
           return String(__unwrapped)
         } else {
           return nil

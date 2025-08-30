@@ -16,7 +16,6 @@
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 #include "JHybridDynamicActivitiesSpec.hpp"
-#include <NitroModules/JNISharedPtr.hpp>
 #include <NitroModules/DefaultConstructableObject.hpp>
 
 namespace margelo::nitro::dynamicactivities {
@@ -36,8 +35,7 @@ int initialize(JavaVM* vm) {
       []() -> std::shared_ptr<HybridObject> {
         static DefaultConstructableObject<JHybridDynamicActivitiesSpec::javaobject> object("com/dynamicactivities/HybridDynamicActivities");
         auto instance = object.create();
-        auto globalRef = jni::make_global(instance);
-        return JNISharedPtr::make_shared_from_jni<JHybridDynamicActivitiesSpec>(globalRef);
+        return instance->cthis()->shared();
       }
     );
   });

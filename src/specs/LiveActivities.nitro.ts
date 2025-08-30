@@ -77,7 +77,7 @@ export interface DynamicActivities extends HybridObject<{ ios: "swift"; android:
    * Update an existing Live Activity
    * @param activityId - The ID of the activity to update
    * @param content - The new content for the Live Activity
-   * @param alertConfiguration - Optional alert configuration (iOS 16.2+ not 26.0+ as in request)
+   * @param alertConfiguration - Optional alert configuration (iOS 26.0+)
    * @param timestamp - Optional timestamp (iOS 17.2+)
    * @throws {LiveActivityError} When activity is not found, already ended, or content is invalid
    */
@@ -93,11 +93,13 @@ export interface DynamicActivities extends HybridObject<{ ios: "swift"; android:
    * @param activityId - The ID of the activity to end
    * @param content - The final content for the Live Activity
    * @param dismissalPolicy - Optional dismissal policy
+   * @param timestamp - Optional timestamp (iOS 17.2+)
    * @throws {LiveActivityError} When activity is not found or already ended
    */
   endLiveActivity(
     activityId: string,
     content: LiveActivityContent,
     dismissalPolicy?: LiveActivityDismissalPolicy,
+    timestamp?: Date,
   ): Promise<void>;
 }

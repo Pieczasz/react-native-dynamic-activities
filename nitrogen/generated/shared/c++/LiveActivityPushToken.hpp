@@ -40,18 +40,16 @@ namespace margelo::nitro::dynamicactivities {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::dynamicactivities;
-
   // C++ LiveActivityPushToken <> JS LiveActivityPushToken (object)
   template <>
-  struct JSIConverter<LiveActivityPushToken> final {
-    static inline LiveActivityPushToken fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::dynamicactivities::LiveActivityPushToken> final {
+    static inline margelo::nitro::dynamicactivities::LiveActivityPushToken fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return LiveActivityPushToken(
+      return margelo::nitro::dynamicactivities::LiveActivityPushToken(
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "token"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const LiveActivityPushToken& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::dynamicactivities::LiveActivityPushToken& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "token", JSIConverter<std::string>::toJSI(runtime, arg.token));
       return obj;

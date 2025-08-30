@@ -56,10 +56,10 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    * Specialized version of `std::shared_ptr<Promise<LiveActivitiesSupportInfo>>`.
    */
   using std__shared_ptr_Promise_LiveActivitiesSupportInfo__ = std::shared_ptr<Promise<LiveActivitiesSupportInfo>>;
-  inline std::shared_ptr<Promise<LiveActivitiesSupportInfo>> create_std__shared_ptr_Promise_LiveActivitiesSupportInfo__() {
+  inline std::shared_ptr<Promise<LiveActivitiesSupportInfo>> create_std__shared_ptr_Promise_LiveActivitiesSupportInfo__() noexcept {
     return Promise<LiveActivitiesSupportInfo>::create();
   }
-  inline PromiseHolder<LiveActivitiesSupportInfo> wrap_std__shared_ptr_Promise_LiveActivitiesSupportInfo__(std::shared_ptr<Promise<LiveActivitiesSupportInfo>> promise) {
+  inline PromiseHolder<LiveActivitiesSupportInfo> wrap_std__shared_ptr_Promise_LiveActivitiesSupportInfo__(std::shared_ptr<Promise<LiveActivitiesSupportInfo>> promise) noexcept {
     return PromiseHolder<LiveActivitiesSupportInfo>(std::move(promise));
   }
   
@@ -74,14 +74,14 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
   class Func_void_LiveActivitiesSupportInfo_Wrapper final {
   public:
     explicit Func_void_LiveActivitiesSupportInfo_Wrapper(std::function<void(const LiveActivitiesSupportInfo& /* result */)>&& func): _function(std::make_unique<std::function<void(const LiveActivitiesSupportInfo& /* result */)>>(std::move(func))) {}
-    inline void call(LiveActivitiesSupportInfo result) const {
+    inline void call(LiveActivitiesSupportInfo result) const noexcept {
       _function->operator()(result);
     }
   private:
     std::unique_ptr<std::function<void(const LiveActivitiesSupportInfo& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_LiveActivitiesSupportInfo create_Func_void_LiveActivitiesSupportInfo(void* _Nonnull swiftClosureWrapper);
-  inline Func_void_LiveActivitiesSupportInfo_Wrapper wrap_Func_void_LiveActivitiesSupportInfo(Func_void_LiveActivitiesSupportInfo value) {
+  Func_void_LiveActivitiesSupportInfo create_Func_void_LiveActivitiesSupportInfo(void* _Nonnull swiftClosureWrapper) noexcept;
+  inline Func_void_LiveActivitiesSupportInfo_Wrapper wrap_Func_void_LiveActivitiesSupportInfo(Func_void_LiveActivitiesSupportInfo value) noexcept {
     return Func_void_LiveActivitiesSupportInfo_Wrapper(std::move(value));
   }
   
@@ -96,14 +96,14 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
   class Func_void_std__exception_ptr_Wrapper final {
   public:
     explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::make_unique<std::function<void(const std::exception_ptr& /* error */)>>(std::move(func))) {}
-    inline void call(std::exception_ptr error) const {
+    inline void call(std::exception_ptr error) const noexcept {
       _function->operator()(error);
     }
   private:
     std::unique_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* _Nonnull swiftClosureWrapper);
-  inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) {
+  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* _Nonnull swiftClosureWrapper) noexcept;
+  inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
     return Func_void_std__exception_ptr_Wrapper(std::move(value));
   }
   
@@ -112,8 +112,14 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    * Specialized version of `std::optional<std::string>`.
    */
   using std__optional_std__string_ = std::optional<std::string>;
-  inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) {
+  inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) noexcept {
     return std::optional<std::string>(value);
+  }
+  inline bool has_value_std__optional_std__string_(const std::optional<std::string>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::string get_std__optional_std__string_(const std::optional<std::string>& optional) noexcept {
+    return *optional;
   }
   
   // pragma MARK: std::shared_ptr<Promise<LiveActivityStartResult>>
@@ -121,10 +127,10 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    * Specialized version of `std::shared_ptr<Promise<LiveActivityStartResult>>`.
    */
   using std__shared_ptr_Promise_LiveActivityStartResult__ = std::shared_ptr<Promise<LiveActivityStartResult>>;
-  inline std::shared_ptr<Promise<LiveActivityStartResult>> create_std__shared_ptr_Promise_LiveActivityStartResult__() {
+  inline std::shared_ptr<Promise<LiveActivityStartResult>> create_std__shared_ptr_Promise_LiveActivityStartResult__() noexcept {
     return Promise<LiveActivityStartResult>::create();
   }
-  inline PromiseHolder<LiveActivityStartResult> wrap_std__shared_ptr_Promise_LiveActivityStartResult__(std::shared_ptr<Promise<LiveActivityStartResult>> promise) {
+  inline PromiseHolder<LiveActivityStartResult> wrap_std__shared_ptr_Promise_LiveActivityStartResult__(std::shared_ptr<Promise<LiveActivityStartResult>> promise) noexcept {
     return PromiseHolder<LiveActivityStartResult>(std::move(promise));
   }
   
@@ -139,14 +145,14 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
   class Func_void_LiveActivityStartResult_Wrapper final {
   public:
     explicit Func_void_LiveActivityStartResult_Wrapper(std::function<void(const LiveActivityStartResult& /* result */)>&& func): _function(std::make_unique<std::function<void(const LiveActivityStartResult& /* result */)>>(std::move(func))) {}
-    inline void call(LiveActivityStartResult result) const {
+    inline void call(LiveActivityStartResult result) const noexcept {
       _function->operator()(result);
     }
   private:
     std::unique_ptr<std::function<void(const LiveActivityStartResult& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_LiveActivityStartResult create_Func_void_LiveActivityStartResult(void* _Nonnull swiftClosureWrapper);
-  inline Func_void_LiveActivityStartResult_Wrapper wrap_Func_void_LiveActivityStartResult(Func_void_LiveActivityStartResult value) {
+  Func_void_LiveActivityStartResult create_Func_void_LiveActivityStartResult(void* _Nonnull swiftClosureWrapper) noexcept;
+  inline Func_void_LiveActivityStartResult_Wrapper wrap_Func_void_LiveActivityStartResult(Func_void_LiveActivityStartResult value) noexcept {
     return Func_void_LiveActivityStartResult_Wrapper(std::move(value));
   }
   
@@ -155,8 +161,14 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    * Specialized version of `std::optional<std::chrono::system_clock::time_point>`.
    */
   using std__optional_std__chrono__system_clock__time_point_ = std::optional<std::chrono::system_clock::time_point>;
-  inline std::optional<std::chrono::system_clock::time_point> create_std__optional_std__chrono__system_clock__time_point_(const std::chrono::system_clock::time_point& value) {
+  inline std::optional<std::chrono::system_clock::time_point> create_std__optional_std__chrono__system_clock__time_point_(const std::chrono::system_clock::time_point& value) noexcept {
     return std::optional<std::chrono::system_clock::time_point>(value);
+  }
+  inline bool has_value_std__optional_std__chrono__system_clock__time_point_(const std::optional<std::chrono::system_clock::time_point>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::chrono::system_clock::time_point get_std__optional_std__chrono__system_clock__time_point_(const std::optional<std::chrono::system_clock::time_point>& optional) noexcept {
+    return *optional;
   }
   
   // pragma MARK: std::optional<double>
@@ -164,8 +176,14 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    * Specialized version of `std::optional<double>`.
    */
   using std__optional_double_ = std::optional<double>;
-  inline std::optional<double> create_std__optional_double_(const double& value) {
+  inline std::optional<double> create_std__optional_double_(const double& value) noexcept {
     return std::optional<double>(value);
+  }
+  inline bool has_value_std__optional_double_(const std::optional<double>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
+    return *optional;
   }
   
   // pragma MARK: std::optional<LiveActivityPushToken>
@@ -173,8 +191,14 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    * Specialized version of `std::optional<LiveActivityPushToken>`.
    */
   using std__optional_LiveActivityPushToken_ = std::optional<LiveActivityPushToken>;
-  inline std::optional<LiveActivityPushToken> create_std__optional_LiveActivityPushToken_(const LiveActivityPushToken& value) {
+  inline std::optional<LiveActivityPushToken> create_std__optional_LiveActivityPushToken_(const LiveActivityPushToken& value) noexcept {
     return std::optional<LiveActivityPushToken>(value);
+  }
+  inline bool has_value_std__optional_LiveActivityPushToken_(const std::optional<LiveActivityPushToken>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline LiveActivityPushToken get_std__optional_LiveActivityPushToken_(const std::optional<LiveActivityPushToken>& optional) noexcept {
+    return *optional;
   }
   
   // pragma MARK: std::optional<LiveActivityStyle>
@@ -182,8 +206,14 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    * Specialized version of `std::optional<LiveActivityStyle>`.
    */
   using std__optional_LiveActivityStyle_ = std::optional<LiveActivityStyle>;
-  inline std::optional<LiveActivityStyle> create_std__optional_LiveActivityStyle_(const LiveActivityStyle& value) {
+  inline std::optional<LiveActivityStyle> create_std__optional_LiveActivityStyle_(const LiveActivityStyle& value) noexcept {
     return std::optional<LiveActivityStyle>(value);
+  }
+  inline bool has_value_std__optional_LiveActivityStyle_(const std::optional<LiveActivityStyle>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline LiveActivityStyle get_std__optional_LiveActivityStyle_(const std::optional<LiveActivityStyle>& optional) noexcept {
+    return *optional;
   }
   
   // pragma MARK: std::optional<LiveActivityAlertConfiguration>
@@ -191,8 +221,14 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    * Specialized version of `std::optional<LiveActivityAlertConfiguration>`.
    */
   using std__optional_LiveActivityAlertConfiguration_ = std::optional<LiveActivityAlertConfiguration>;
-  inline std::optional<LiveActivityAlertConfiguration> create_std__optional_LiveActivityAlertConfiguration_(const LiveActivityAlertConfiguration& value) {
+  inline std::optional<LiveActivityAlertConfiguration> create_std__optional_LiveActivityAlertConfiguration_(const LiveActivityAlertConfiguration& value) noexcept {
     return std::optional<LiveActivityAlertConfiguration>(value);
+  }
+  inline bool has_value_std__optional_LiveActivityAlertConfiguration_(const std::optional<LiveActivityAlertConfiguration>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline LiveActivityAlertConfiguration get_std__optional_LiveActivityAlertConfiguration_(const std::optional<LiveActivityAlertConfiguration>& optional) noexcept {
+    return *optional;
   }
   
   // pragma MARK: std::shared_ptr<Promise<void>>
@@ -200,10 +236,10 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    * Specialized version of `std::shared_ptr<Promise<void>>`.
    */
   using std__shared_ptr_Promise_void__ = std::shared_ptr<Promise<void>>;
-  inline std::shared_ptr<Promise<void>> create_std__shared_ptr_Promise_void__() {
+  inline std::shared_ptr<Promise<void>> create_std__shared_ptr_Promise_void__() noexcept {
     return Promise<void>::create();
   }
-  inline PromiseHolder<void> wrap_std__shared_ptr_Promise_void__(std::shared_ptr<Promise<void>> promise) {
+  inline PromiseHolder<void> wrap_std__shared_ptr_Promise_void__(std::shared_ptr<Promise<void>> promise) noexcept {
     return PromiseHolder<void>(std::move(promise));
   }
   
@@ -218,14 +254,14 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
   class Func_void_Wrapper final {
   public:
     explicit Func_void_Wrapper(std::function<void()>&& func): _function(std::make_unique<std::function<void()>>(std::move(func))) {}
-    inline void call() const {
+    inline void call() const noexcept {
       _function->operator()();
     }
   private:
     std::unique_ptr<std::function<void()>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void create_Func_void(void* _Nonnull swiftClosureWrapper);
-  inline Func_void_Wrapper wrap_Func_void(Func_void value) {
+  Func_void create_Func_void(void* _Nonnull swiftClosureWrapper) noexcept;
+  inline Func_void_Wrapper wrap_Func_void(Func_void value) noexcept {
     return Func_void_Wrapper(std::move(value));
   }
   
@@ -234,46 +270,52 @@ namespace margelo::nitro::dynamicactivities::bridge::swift {
    * Specialized version of `std::optional<LiveActivityDismissalPolicy>`.
    */
   using std__optional_LiveActivityDismissalPolicy_ = std::optional<LiveActivityDismissalPolicy>;
-  inline std::optional<LiveActivityDismissalPolicy> create_std__optional_LiveActivityDismissalPolicy_(const LiveActivityDismissalPolicy& value) {
+  inline std::optional<LiveActivityDismissalPolicy> create_std__optional_LiveActivityDismissalPolicy_(const LiveActivityDismissalPolicy& value) noexcept {
     return std::optional<LiveActivityDismissalPolicy>(value);
   }
+  inline bool has_value_std__optional_LiveActivityDismissalPolicy_(const std::optional<LiveActivityDismissalPolicy>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline LiveActivityDismissalPolicy get_std__optional_LiveActivityDismissalPolicy_(const std::optional<LiveActivityDismissalPolicy>& optional) noexcept {
+    return *optional;
+  }
   
-  // pragma MARK: std::shared_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpec>
+  // pragma MARK: std::shared_ptr<HybridDynamicActivitiesSpec>
   /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpec>`.
+   * Specialized version of `std::shared_ptr<HybridDynamicActivitiesSpec>`.
    */
-  using std__shared_ptr_margelo__nitro__dynamicactivities__HybridDynamicActivitiesSpec_ = std::shared_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpec>;
-  std::shared_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpec> create_std__shared_ptr_margelo__nitro__dynamicactivities__HybridDynamicActivitiesSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__dynamicactivities__HybridDynamicActivitiesSpec_(std__shared_ptr_margelo__nitro__dynamicactivities__HybridDynamicActivitiesSpec_ cppType);
+  using std__shared_ptr_HybridDynamicActivitiesSpec_ = std::shared_ptr<HybridDynamicActivitiesSpec>;
+  std::shared_ptr<HybridDynamicActivitiesSpec> create_std__shared_ptr_HybridDynamicActivitiesSpec_(void* _Nonnull swiftUnsafePointer) noexcept;
+  void* _Nonnull get_std__shared_ptr_HybridDynamicActivitiesSpec_(std__shared_ptr_HybridDynamicActivitiesSpec_ cppType) noexcept;
   
-  // pragma MARK: std::weak_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpec>
-  using std__weak_ptr_margelo__nitro__dynamicactivities__HybridDynamicActivitiesSpec_ = std::weak_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpec>;
-  inline std__weak_ptr_margelo__nitro__dynamicactivities__HybridDynamicActivitiesSpec_ weakify_std__shared_ptr_margelo__nitro__dynamicactivities__HybridDynamicActivitiesSpec_(const std::shared_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpec>& strong) { return strong; }
+  // pragma MARK: std::weak_ptr<HybridDynamicActivitiesSpec>
+  using std__weak_ptr_HybridDynamicActivitiesSpec_ = std::weak_ptr<HybridDynamicActivitiesSpec>;
+  inline std__weak_ptr_HybridDynamicActivitiesSpec_ weakify_std__shared_ptr_HybridDynamicActivitiesSpec_(const std::shared_ptr<HybridDynamicActivitiesSpec>& strong) noexcept { return strong; }
   
   // pragma MARK: Result<std::shared_ptr<Promise<LiveActivitiesSupportInfo>>>
   using Result_std__shared_ptr_Promise_LiveActivitiesSupportInfo___ = Result<std::shared_ptr<Promise<LiveActivitiesSupportInfo>>>;
-  inline Result_std__shared_ptr_Promise_LiveActivitiesSupportInfo___ create_Result_std__shared_ptr_Promise_LiveActivitiesSupportInfo___(const std::shared_ptr<Promise<LiveActivitiesSupportInfo>>& value) {
+  inline Result_std__shared_ptr_Promise_LiveActivitiesSupportInfo___ create_Result_std__shared_ptr_Promise_LiveActivitiesSupportInfo___(const std::shared_ptr<Promise<LiveActivitiesSupportInfo>>& value) noexcept {
     return Result<std::shared_ptr<Promise<LiveActivitiesSupportInfo>>>::withValue(value);
   }
-  inline Result_std__shared_ptr_Promise_LiveActivitiesSupportInfo___ create_Result_std__shared_ptr_Promise_LiveActivitiesSupportInfo___(const std::exception_ptr& error) {
+  inline Result_std__shared_ptr_Promise_LiveActivitiesSupportInfo___ create_Result_std__shared_ptr_Promise_LiveActivitiesSupportInfo___(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<LiveActivitiesSupportInfo>>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<Promise<LiveActivityStartResult>>>
   using Result_std__shared_ptr_Promise_LiveActivityStartResult___ = Result<std::shared_ptr<Promise<LiveActivityStartResult>>>;
-  inline Result_std__shared_ptr_Promise_LiveActivityStartResult___ create_Result_std__shared_ptr_Promise_LiveActivityStartResult___(const std::shared_ptr<Promise<LiveActivityStartResult>>& value) {
+  inline Result_std__shared_ptr_Promise_LiveActivityStartResult___ create_Result_std__shared_ptr_Promise_LiveActivityStartResult___(const std::shared_ptr<Promise<LiveActivityStartResult>>& value) noexcept {
     return Result<std::shared_ptr<Promise<LiveActivityStartResult>>>::withValue(value);
   }
-  inline Result_std__shared_ptr_Promise_LiveActivityStartResult___ create_Result_std__shared_ptr_Promise_LiveActivityStartResult___(const std::exception_ptr& error) {
+  inline Result_std__shared_ptr_Promise_LiveActivityStartResult___ create_Result_std__shared_ptr_Promise_LiveActivityStartResult___(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<LiveActivityStartResult>>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<Promise<void>>>
   using Result_std__shared_ptr_Promise_void___ = Result<std::shared_ptr<Promise<void>>>;
-  inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::shared_ptr<Promise<void>>& value) {
+  inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::shared_ptr<Promise<void>>& value) noexcept {
     return Result<std::shared_ptr<Promise<void>>>::withValue(value);
   }
-  inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::exception_ptr& error) {
+  inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<void>>>::withError(error);
   }
 

@@ -37,24 +37,22 @@ namespace margelo::nitro::dynamicactivities {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::dynamicactivities;
-
   // C++ LiveActivityStyle <> JS LiveActivityStyle (union)
   template <>
-  struct JSIConverter<LiveActivityStyle> final {
-    static inline LiveActivityStyle fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::dynamicactivities::LiveActivityStyle> final {
+    static inline margelo::nitro::dynamicactivities::LiveActivityStyle fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("standard"): return LiveActivityStyle::STANDARD;
-        case hashString("transient"): return LiveActivityStyle::TRANSIENT;
+        case hashString("standard"): return margelo::nitro::dynamicactivities::LiveActivityStyle::STANDARD;
+        case hashString("transient"): return margelo::nitro::dynamicactivities::LiveActivityStyle::TRANSIENT;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum LiveActivityStyle - invalid value!");
       }
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, LiveActivityStyle arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::dynamicactivities::LiveActivityStyle arg) {
       switch (arg) {
-        case LiveActivityStyle::STANDARD: return JSIConverter<std::string>::toJSI(runtime, "standard");
-        case LiveActivityStyle::TRANSIENT: return JSIConverter<std::string>::toJSI(runtime, "transient");
+        case margelo::nitro::dynamicactivities::LiveActivityStyle::STANDARD: return JSIConverter<std::string>::toJSI(runtime, "standard");
+        case margelo::nitro::dynamicactivities::LiveActivityStyle::TRANSIENT: return JSIConverter<std::string>::toJSI(runtime, "transient");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert LiveActivityStyle to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");

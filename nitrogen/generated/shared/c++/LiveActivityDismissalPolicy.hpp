@@ -38,26 +38,24 @@ namespace margelo::nitro::dynamicactivities {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::dynamicactivities;
-
   // C++ LiveActivityDismissalPolicy <> JS LiveActivityDismissalPolicy (union)
   template <>
-  struct JSIConverter<LiveActivityDismissalPolicy> final {
-    static inline LiveActivityDismissalPolicy fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::dynamicactivities::LiveActivityDismissalPolicy> final {
+    static inline margelo::nitro::dynamicactivities::LiveActivityDismissalPolicy fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("default"): return LiveActivityDismissalPolicy::DEFAULT;
-        case hashString("immediate"): return LiveActivityDismissalPolicy::IMMEDIATE;
-        case hashString("after"): return LiveActivityDismissalPolicy::AFTER;
+        case hashString("default"): return margelo::nitro::dynamicactivities::LiveActivityDismissalPolicy::DEFAULT;
+        case hashString("immediate"): return margelo::nitro::dynamicactivities::LiveActivityDismissalPolicy::IMMEDIATE;
+        case hashString("after"): return margelo::nitro::dynamicactivities::LiveActivityDismissalPolicy::AFTER;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum LiveActivityDismissalPolicy - invalid value!");
       }
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, LiveActivityDismissalPolicy arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::dynamicactivities::LiveActivityDismissalPolicy arg) {
       switch (arg) {
-        case LiveActivityDismissalPolicy::DEFAULT: return JSIConverter<std::string>::toJSI(runtime, "default");
-        case LiveActivityDismissalPolicy::IMMEDIATE: return JSIConverter<std::string>::toJSI(runtime, "immediate");
-        case LiveActivityDismissalPolicy::AFTER: return JSIConverter<std::string>::toJSI(runtime, "after");
+        case margelo::nitro::dynamicactivities::LiveActivityDismissalPolicy::DEFAULT: return JSIConverter<std::string>::toJSI(runtime, "default");
+        case margelo::nitro::dynamicactivities::LiveActivityDismissalPolicy::IMMEDIATE: return JSIConverter<std::string>::toJSI(runtime, "immediate");
+        case margelo::nitro::dynamicactivities::LiveActivityDismissalPolicy::AFTER: return JSIConverter<std::string>::toJSI(runtime, "after");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert LiveActivityDismissalPolicy to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");

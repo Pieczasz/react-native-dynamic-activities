@@ -40,30 +40,28 @@ namespace margelo::nitro::dynamicactivities {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::dynamicactivities;
-
   // C++ LiveActivityState <> JS LiveActivityState (union)
   template <>
-  struct JSIConverter<LiveActivityState> final {
-    static inline LiveActivityState fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::dynamicactivities::LiveActivityState> final {
+    static inline margelo::nitro::dynamicactivities::LiveActivityState fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("active"): return LiveActivityState::ACTIVE;
-        case hashString("dismissed"): return LiveActivityState::DISMISSED;
-        case hashString("pending"): return LiveActivityState::PENDING;
-        case hashString("stale"): return LiveActivityState::STALE;
-        case hashString("ended"): return LiveActivityState::ENDED;
+        case hashString("active"): return margelo::nitro::dynamicactivities::LiveActivityState::ACTIVE;
+        case hashString("dismissed"): return margelo::nitro::dynamicactivities::LiveActivityState::DISMISSED;
+        case hashString("pending"): return margelo::nitro::dynamicactivities::LiveActivityState::PENDING;
+        case hashString("stale"): return margelo::nitro::dynamicactivities::LiveActivityState::STALE;
+        case hashString("ended"): return margelo::nitro::dynamicactivities::LiveActivityState::ENDED;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum LiveActivityState - invalid value!");
       }
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, LiveActivityState arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::dynamicactivities::LiveActivityState arg) {
       switch (arg) {
-        case LiveActivityState::ACTIVE: return JSIConverter<std::string>::toJSI(runtime, "active");
-        case LiveActivityState::DISMISSED: return JSIConverter<std::string>::toJSI(runtime, "dismissed");
-        case LiveActivityState::PENDING: return JSIConverter<std::string>::toJSI(runtime, "pending");
-        case LiveActivityState::STALE: return JSIConverter<std::string>::toJSI(runtime, "stale");
-        case LiveActivityState::ENDED: return JSIConverter<std::string>::toJSI(runtime, "ended");
+        case margelo::nitro::dynamicactivities::LiveActivityState::ACTIVE: return JSIConverter<std::string>::toJSI(runtime, "active");
+        case margelo::nitro::dynamicactivities::LiveActivityState::DISMISSED: return JSIConverter<std::string>::toJSI(runtime, "dismissed");
+        case margelo::nitro::dynamicactivities::LiveActivityState::PENDING: return JSIConverter<std::string>::toJSI(runtime, "pending");
+        case margelo::nitro::dynamicactivities::LiveActivityState::STALE: return JSIConverter<std::string>::toJSI(runtime, "stale");
+        case margelo::nitro::dynamicactivities::LiveActivityState::ENDED: return JSIConverter<std::string>::toJSI(runtime, "ended");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert LiveActivityState to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");

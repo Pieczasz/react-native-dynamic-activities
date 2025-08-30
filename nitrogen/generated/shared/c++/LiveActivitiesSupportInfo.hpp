@@ -42,20 +42,18 @@ namespace margelo::nitro::dynamicactivities {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::dynamicactivities;
-
   // C++ LiveActivitiesSupportInfo <> JS LiveActivitiesSupportInfo (object)
   template <>
-  struct JSIConverter<LiveActivitiesSupportInfo> final {
-    static inline LiveActivitiesSupportInfo fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::dynamicactivities::LiveActivitiesSupportInfo> final {
+    static inline margelo::nitro::dynamicactivities::LiveActivitiesSupportInfo fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return LiveActivitiesSupportInfo(
+      return margelo::nitro::dynamicactivities::LiveActivitiesSupportInfo(
         JSIConverter<bool>::fromJSI(runtime, obj.getProperty(runtime, "supported")),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "version")),
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "comment"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const LiveActivitiesSupportInfo& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::dynamicactivities::LiveActivitiesSupportInfo& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "supported", JSIConverter<bool>::toJSI(runtime, arg.supported));
       obj.setProperty(runtime, "version", JSIConverter<double>::toJSI(runtime, arg.version));

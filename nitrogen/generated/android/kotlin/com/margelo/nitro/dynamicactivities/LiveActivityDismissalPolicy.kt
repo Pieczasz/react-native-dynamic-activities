@@ -15,12 +15,8 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @DoNotStrip
 @Keep
-enum class LiveActivityDismissalPolicy {
-  DEFAULT,
-  IMMEDIATE,
-  AFTER;
-
-  @DoNotStrip
-  @Keep
-  private val _ordinal = ordinal
+enum class LiveActivityDismissalPolicy(@DoNotStrip @Keep val value: Int) {
+  DEFAULT(0),
+  IMMEDIATE(1),
+  AFTER(2);
 }

@@ -42,20 +42,18 @@ namespace margelo::nitro::dynamicactivities {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::dynamicactivities;
-
   // C++ LiveActivityAlertConfiguration <> JS LiveActivityAlertConfiguration (object)
   template <>
-  struct JSIConverter<LiveActivityAlertConfiguration> final {
-    static inline LiveActivityAlertConfiguration fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::dynamicactivities::LiveActivityAlertConfiguration> final {
+    static inline margelo::nitro::dynamicactivities::LiveActivityAlertConfiguration fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return LiveActivityAlertConfiguration(
+      return margelo::nitro::dynamicactivities::LiveActivityAlertConfiguration(
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "title")),
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "body")),
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "sound"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const LiveActivityAlertConfiguration& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::dynamicactivities::LiveActivityAlertConfiguration& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "title", JSIConverter<std::string>::toJSI(runtime, arg.title));
       obj.setProperty(runtime, "body", JSIConverter<std::string>::toJSI(runtime, arg.body));

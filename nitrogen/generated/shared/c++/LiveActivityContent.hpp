@@ -22,8 +22,8 @@
 namespace margelo::nitro::dynamicactivities { enum class LiveActivityState; }
 
 #include "LiveActivityState.hpp"
-#include <optional>
 #include <chrono>
+#include <optional>
 
 namespace margelo::nitro::dynamicactivities {
 
@@ -45,22 +45,20 @@ namespace margelo::nitro::dynamicactivities {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::dynamicactivities;
-
   // C++ LiveActivityContent <> JS LiveActivityContent (object)
   template <>
-  struct JSIConverter<LiveActivityContent> final {
-    static inline LiveActivityContent fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::dynamicactivities::LiveActivityContent> final {
+    static inline margelo::nitro::dynamicactivities::LiveActivityContent fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return LiveActivityContent(
-        JSIConverter<LiveActivityState>::fromJSI(runtime, obj.getProperty(runtime, "state")),
+      return margelo::nitro::dynamicactivities::LiveActivityContent(
+        JSIConverter<margelo::nitro::dynamicactivities::LiveActivityState>::fromJSI(runtime, obj.getProperty(runtime, "state")),
         JSIConverter<std::optional<std::chrono::system_clock::time_point>>::fromJSI(runtime, obj.getProperty(runtime, "staleDate")),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, "relevanceScore"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const LiveActivityContent& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::dynamicactivities::LiveActivityContent& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, "state", JSIConverter<LiveActivityState>::toJSI(runtime, arg.state));
+      obj.setProperty(runtime, "state", JSIConverter<margelo::nitro::dynamicactivities::LiveActivityState>::toJSI(runtime, arg.state));
       obj.setProperty(runtime, "staleDate", JSIConverter<std::optional<std::chrono::system_clock::time_point>>::toJSI(runtime, arg.staleDate));
       obj.setProperty(runtime, "relevanceScore", JSIConverter<std::optional<double>>::toJSI(runtime, arg.relevanceScore));
       return obj;
@@ -70,7 +68,7 @@ namespace margelo::nitro {
         return false;
       }
       jsi::Object obj = value.getObject(runtime);
-      if (!JSIConverter<LiveActivityState>::canConvert(runtime, obj.getProperty(runtime, "state"))) return false;
+      if (!JSIConverter<margelo::nitro::dynamicactivities::LiveActivityState>::canConvert(runtime, obj.getProperty(runtime, "state"))) return false;
       if (!JSIConverter<std::optional<std::chrono::system_clock::time_point>>::canConvert(runtime, obj.getProperty(runtime, "staleDate"))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, "relevanceScore"))) return false;
       return true;

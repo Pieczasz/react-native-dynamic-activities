@@ -19,7 +19,6 @@ import NitroModules
 final class HybridDynamicActivities: HybridDynamicActivitiesSpec {
   // MARK: - Properties
 
-  /// Service instance for ActivityKit operations
   private let service = LiveActivitiesService()
 
   // MARK: - LiveActivities Support
@@ -72,13 +71,15 @@ final class HybridDynamicActivities: HybridDynamicActivitiesSpec {
   func endLiveActivity(
     activityId: String,
     content: LiveActivityContent,
-    dismissalPolicy: LiveActivityDismissalPolicy?
+    dismissalPolicy: LiveActivityDismissalPolicy?,
+    timestamp: Date?
   ) throws -> Promise<Void> {
     executeWithPromise { [weak self] in
       try self?.service.endActivity(
         activityId: activityId,
         content: content,
-        dismissalPolicy: dismissalPolicy
+        dismissalPolicy: dismissalPolicy,
+        timestamp: timestamp
       )
     }
   }

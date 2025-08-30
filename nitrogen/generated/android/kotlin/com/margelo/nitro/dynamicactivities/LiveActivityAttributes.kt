@@ -11,6 +11,7 @@ import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.*
 
+
 /**
  * Represents the JavaScript object/struct "LiveActivityAttributes".
  */
@@ -20,7 +21,11 @@ data class LiveActivityAttributes
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val title: String,
+    @DoNotStrip
+    @Keep
     val body: String
   ) {
   /* main constructor */

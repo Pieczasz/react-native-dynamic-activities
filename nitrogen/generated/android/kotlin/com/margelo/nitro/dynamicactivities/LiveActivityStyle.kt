@@ -15,11 +15,7 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @DoNotStrip
 @Keep
-enum class LiveActivityStyle {
-  STANDARD,
-  TRANSIENT;
-
-  @DoNotStrip
-  @Keep
-  private val _ordinal = ordinal
+enum class LiveActivityStyle(@DoNotStrip @Keep val value: Int) {
+  STANDARD(0),
+  TRANSIENT(1);
 }

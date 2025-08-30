@@ -11,6 +11,7 @@ import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.*
 
+
 /**
  * Represents the JavaScript object/struct "LiveActivitiesSupportInfo".
  */
@@ -20,8 +21,14 @@ data class LiveActivitiesSupportInfo
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val supported: Boolean,
+    @DoNotStrip
+    @Keep
     val version: Double,
+    @DoNotStrip
+    @Keep
     val comment: String
   ) {
   /* main constructor */

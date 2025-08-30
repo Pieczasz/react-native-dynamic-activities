@@ -30,13 +30,13 @@ namespace margelo::nitro::dynamicactivities { struct LiveActivityAlertConfigurat
 // Forward declaration of `LiveActivityDismissalPolicy` to properly resolve imports.
 namespace margelo::nitro::dynamicactivities { enum class LiveActivityDismissalPolicy; }
 
-#include <NitroModules/Promise.hpp>
 #include "LiveActivitiesSupportInfo.hpp"
+#include <NitroModules/Promise.hpp>
 #include "LiveActivityStartResult.hpp"
 #include "LiveActivityAttributes.hpp"
 #include "LiveActivityContent.hpp"
-#include <optional>
 #include "LiveActivityPushToken.hpp"
+#include <optional>
 #include "LiveActivityStyle.hpp"
 #include "LiveActivityAlertConfiguration.hpp"
 #include <chrono>
@@ -77,7 +77,7 @@ namespace margelo::nitro::dynamicactivities {
       virtual std::shared_ptr<Promise<LiveActivitiesSupportInfo>> areLiveActivitiesSupported() = 0;
       virtual std::shared_ptr<Promise<LiveActivityStartResult>> startLiveActivity(const LiveActivityAttributes& attributes, const LiveActivityContent& content, const std::optional<LiveActivityPushToken>& pushToken, std::optional<LiveActivityStyle> style, const std::optional<LiveActivityAlertConfiguration>& alertConfiguration, std::optional<std::chrono::system_clock::time_point> start) = 0;
       virtual std::shared_ptr<Promise<void>> updateLiveActivity(const std::string& activityId, const LiveActivityContent& content, const std::optional<LiveActivityAlertConfiguration>& alertConfiguration, std::optional<std::chrono::system_clock::time_point> timestamp) = 0;
-      virtual std::shared_ptr<Promise<void>> endLiveActivity(const std::string& activityId, const LiveActivityContent& content, std::optional<LiveActivityDismissalPolicy> dismissalPolicy) = 0;
+      virtual std::shared_ptr<Promise<void>> endLiveActivity(const std::string& activityId, const LiveActivityContent& content, std::optional<LiveActivityDismissalPolicy> dismissalPolicy, std::optional<std::chrono::system_clock::time_point> timestamp) = 0;
 
     protected:
       // Hybrid Setup

@@ -41,19 +41,17 @@ namespace margelo::nitro::dynamicactivities {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::dynamicactivities;
-
   // C++ LiveActivityAttributes <> JS LiveActivityAttributes (object)
   template <>
-  struct JSIConverter<LiveActivityAttributes> final {
-    static inline LiveActivityAttributes fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::dynamicactivities::LiveActivityAttributes> final {
+    static inline margelo::nitro::dynamicactivities::LiveActivityAttributes fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return LiveActivityAttributes(
+      return margelo::nitro::dynamicactivities::LiveActivityAttributes(
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "title")),
         JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, "body"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const LiveActivityAttributes& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::dynamicactivities::LiveActivityAttributes& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "title", JSIConverter<std::string>::toJSI(runtime, arg.title));
       obj.setProperty(runtime, "body", JSIConverter<std::string>::toJSI(runtime, arg.body));

@@ -11,6 +11,7 @@ import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.*
 
+
 /**
  * Represents the JavaScript object/struct "LiveActivityPushToken".
  */
@@ -20,6 +21,8 @@ data class LiveActivityPushToken
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val token: String
   ) {
   /* main constructor */

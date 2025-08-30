@@ -31,8 +31,8 @@ namespace margelo::nitro::dynamicactivities { struct LiveActivityAlertConfigurat
 // Forward declaration of `LiveActivityDismissalPolicy` to properly resolve imports.
 namespace margelo::nitro::dynamicactivities { enum class LiveActivityDismissalPolicy; }
 
-#include <NitroModules/Promise.hpp>
 #include "LiveActivitiesSupportInfo.hpp"
+#include <NitroModules/Promise.hpp>
 #include <string>
 #include "LiveActivityStartResult.hpp"
 #include <optional>
@@ -73,9 +73,11 @@ namespace margelo::nitro::dynamicactivities {
     }
 
   public:
-    // Get memory pressure
     inline size_t getExternalMemorySize() noexcept override {
       return _swiftPart.getMemorySize();
+    }
+    void dispose() noexcept override {
+      _swiftPart.dispose();
     }
 
   public:
@@ -108,8 +110,8 @@ namespace margelo::nitro::dynamicactivities {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<void>> endLiveActivity(const std::string& activityId, const LiveActivityContent& content, std::optional<LiveActivityDismissalPolicy> dismissalPolicy) override {
-      auto __result = _swiftPart.endLiveActivity(activityId, content, dismissalPolicy);
+    inline std::shared_ptr<Promise<void>> endLiveActivity(const std::string& activityId, const LiveActivityContent& content, std::optional<LiveActivityDismissalPolicy> dismissalPolicy, std::optional<std::chrono::system_clock::time_point> timestamp) override {
+      auto __result = _swiftPart.endLiveActivity(activityId, content, dismissalPolicy, timestamp);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

@@ -11,6 +11,7 @@ import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.*
 
+
 /**
  * Represents the JavaScript object/struct "LiveActivityAlertConfiguration".
  */
@@ -20,8 +21,14 @@ data class LiveActivityAlertConfiguration
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val title: String,
+    @DoNotStrip
+    @Keep
     val body: String,
+    @DoNotStrip
+    @Keep
     val sound: String
   ) {
   /* main constructor */
