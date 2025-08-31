@@ -5,9 +5,9 @@
  * Production-ready command line interface for widget generation
  */
 
-const { program } = require('commander');
-const path = require('path');
-const fs = require('fs');
+const { program } = require("commander");
+const path = require("node:path");
+const fs = require("node:fs");
 
 // Color output helpers
 const colors = {
@@ -39,21 +39,27 @@ class DynamicActivitiesCLI {
    */
   validateEnvironment() {
     if (!fs.existsSync(path.join(this.projectRoot, "package.json"))) {
-      throw new Error("Not in a React Native project root. Please run this command from your React Native project's root directory.");
+      throw new Error(
+        "Not in a React Native project root. Please run this command from your React Native project's root directory.",
+      );
     }
 
     if (!fs.existsSync(this.iosDir)) {
-      throw new Error("iOS directory not found. Make sure you're in a React Native project root with an ios/ directory.");
+      throw new Error(
+        "iOS directory not found. Make sure you're in a React Native project root with an ios/ directory.",
+      );
     }
 
     const iosContents = fs.readdirSync(this.iosDir);
     const xcodeproj = iosContents.find((item) => item.endsWith(".xcodeproj"));
 
     if (!xcodeproj) {
-      throw new Error("No Xcode project found in ios/ directory. Make sure your React Native project is properly set up.");
+      throw new Error(
+        "No Xcode project found in ios/ directory. Make sure your React Native project is properly set up.",
+      );
     }
 
-    return xcodeproj.replace('.xcodeproj', '');
+    return xcodeproj.replace(".xcodeproj", "");
   }
 
   /**
@@ -62,7 +68,7 @@ class DynamicActivitiesCLI {
   getWidgetConfig(name) {
     const projectName = this.getProjectName();
     const widgetName = name || "ExampleWidget";
-    const activityName = widgetName.replace(/Widget$/, '') + "Activity";
+    const activityName = `${widgetName.replace(/Widget$/, "")}Activity`;
 
     return {
       widgetName,
@@ -80,7 +86,7 @@ class DynamicActivitiesCLI {
   getProjectName() {
     try {
       const packageJson = JSON.parse(
-        fs.readFileSync(path.join(this.projectRoot, "package.json"), "utf8")
+        fs.readFileSync(path.join(this.projectRoot, "package.json"), "utf8"),
       );
       return packageJson.name || "MyProject";
     } catch (error) {
@@ -95,15 +101,19 @@ class DynamicActivitiesCLI {
   getBundlePrefix() {
     try {
       const projectName = this.validateEnvironment();
-      const plistPath = path.join(this.iosDir, projectName, 'Info.plist');
-      
+      const plistPath = path.join(this.iosDir, projectName, "Info.plist");
+
       if (fs.existsSync(plistPath)) {
-        const plistContent = fs.readFileSync(plistPath, 'utf8');
+        const plistContent = fs.readFileSync(plistPath, "utf8");
         // Simple regex to extract bundle identifier pattern
-        const bundleMatch = plistContent.match(/<key>CFBundleIdentifier<\/key>\s*<string>(.*?)<\/string>/);
+        const bundleMatch = plistContent.match(
+          /<key>CFBundleIdentifier<\/key>\s*<string>(.*?)<\/string>/,
+        );
         if (bundleMatch) {
-          const bundleId = bundleMatch[1].replace('$(PRODUCT_BUNDLE_IDENTIFIER)', '').replace(/\.\w+$/, '');
-          if (bundleId.startsWith('com.')) {
+          const bundleId = bundleMatch[1]
+            .replace("$(PRODUCT_BUNDLE_IDENTIFIER)", "")
+            .replace(/\.\w+$/, "");
+          if (bundleId.startsWith("com.")) {
             return bundleId;
           }
         }
@@ -111,9 +121,11 @@ class DynamicActivitiesCLI {
     } catch (error) {
       log.warning("Could not determine bundle prefix from iOS project");
     }
-    
+
     // Fallback to project name based bundle ID
-    const projectName = this.getProjectName().toLowerCase().replace(/[^a-z0-9]/g, '');
+    const projectName = this.getProjectName()
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
     return `com.${projectName}`;
   }
 
@@ -434,51 +446,73 @@ extension ${config.activityName}Attributes {
 `;
     const filePath = path.join(widgetDir, "Info.plist");
     fs.writeFileSync(filePath, template);
-    log.success(`Generated: Info.plist`);
+    log.success("Generated: Info.plist");
   }
 
   /**
    * Shows completion message with next steps
    */
   showCompletionMessage(config) {
-    console.log(`\n${colors.bold}${colors.green}🎉 Widget Extension Created Successfully!${colors.reset}\n`);
+    console.log(
+      `\n${colors.bold}${colors.green}🎉 Widget Extension Created Successfully!${colors.reset}\n`,
+    );
 
     console.log(`${colors.green}Generated Files:${colors.reset}`);
     console.log(`  📄 ${config.widgetName}Bundle.swift`);
     console.log(`  📄 ${config.activityName}LiveActivity.swift`);
     console.log(`  📄 ${config.activityName}Attributes.swift`);
-    console.log(`  📄 Info.plist\n`);
+    console.log("  📄 Info.plist\n");
 
     console.log(`${colors.yellow}${colors.bold}Manual Xcode Setup Required:${colors.reset}`);
-    console.log(`${colors.cyan}1.${colors.reset} Open your project in ${colors.bold}Xcode${colors.reset}`);
+    console.log(
+      `${colors.cyan}1.${colors.reset} Open your project in ${colors.bold}Xcode${colors.reset}`,
+    );
     console.log(`${colors.cyan}2.${colors.reset} File → New → Target...`);
-    console.log(`${colors.cyan}3.${colors.reset} Select "${colors.bold}Widget Extension${colors.reset}" → Next`);
-    console.log(`${colors.cyan}4.${colors.reset} Product Name: ${colors.bold}${config.widgetName}${colors.reset}`);
-    console.log(`${colors.cyan}5.${colors.reset} Bundle Identifier: ${colors.bold}${config.bundleId}${colors.reset}`);
-    console.log(`${colors.cyan}6.${colors.reset} Check "${colors.bold}Include Live Activity${colors.reset}" if available`);
+    console.log(
+      `${colors.cyan}3.${colors.reset} Select "${colors.bold}Widget Extension${colors.reset}" → Next`,
+    );
+    console.log(
+      `${colors.cyan}4.${colors.reset} Product Name: ${colors.bold}${config.widgetName}${colors.reset}`,
+    );
+    console.log(
+      `${colors.cyan}5.${colors.reset} Bundle Identifier: ${colors.bold}${config.bundleId}${colors.reset}`,
+    );
+    console.log(
+      `${colors.cyan}6.${colors.reset} Check "${colors.bold}Include Live Activity${colors.reset}" if available`,
+    );
     console.log(`${colors.cyan}7.${colors.reset} Click Finish`);
-    console.log(`${colors.cyan}8.${colors.reset} Replace generated files with the ones in ${colors.bold}ios/${config.widgetName}/${colors.reset}`);
-    console.log(`${colors.cyan}9.${colors.reset} Add "${colors.bold}Live Activities${colors.reset}" capability to your main app target\n`);
+    console.log(
+      `${colors.cyan}8.${colors.reset} Replace generated files with the ones in ${colors.bold}ios/${config.widgetName}/${colors.reset}`,
+    );
+    console.log(
+      `${colors.cyan}9.${colors.reset} Add "${colors.bold}Live Activities${colors.reset}" capability to your main app target\n`,
+    );
 
     console.log(`${colors.blue}${colors.bold}Usage in React Native:${colors.reset}`);
-    console.log(`${colors.reset}// Your attributes should match ${config.activityName}Attributes${colors.reset}`);
-    console.log(`const attributes = {`);
+    console.log(
+      `${colors.reset}// Your attributes should match ${config.activityName}Attributes${colors.reset}`,
+    );
+    console.log("const attributes = {");
     console.log(`  title: "My Activity",`);
     console.log(`  body: "Activity description"`);
-    console.log(`};`);
-    console.log(``);
-    console.log(`const content = {`);
+    console.log("};");
+    console.log("");
+    console.log("const content = {");
     console.log(`  state: "active",`);
-    console.log(`  relevanceScore: 1.0`);
-    console.log(`};`);
-    console.log(``);
-    console.log(`const result = await DynamicActivities.startLiveActivity(attributes, content);${colors.reset}\n`);
+    console.log("  relevanceScore: 1.0");
+    console.log("};");
+    console.log("");
+    console.log(
+      `const result = await DynamicActivities.startLiveActivity(attributes, content);${colors.reset}\n`,
+    );
 
     console.log(`${colors.green}${colors.bold}Next Steps:${colors.reset}`);
     console.log(`• Test on a physical device (Live Activities don't work in Simulator)`);
-    console.log(`• Customize the UI in ${colors.bold}${config.activityName}LiveActivity.swift${colors.reset}`);
-    console.log(`• Update your TypeScript types to match Swift ActivityAttributes`);
-    console.log(`• Check the documentation for more advanced features\n`);
+    console.log(
+      `• Customize the UI in ${colors.bold}${config.activityName}LiveActivity.swift${colors.reset}`,
+    );
+    console.log("• Update your TypeScript types to match Swift ActivityAttributes");
+    console.log("• Check the documentation for more advanced features\n");
   }
 }
 
@@ -505,9 +539,11 @@ program
   });
 
 // Handle unknown commands
-program.on('command:*', () => {
-  console.error(`${colors.red}✗${colors.reset} Invalid command: ${program.args.join(' ')}`);
-  console.log(`${colors.yellow}ℹ${colors.reset} Use 'react-native-dynamic-activities help' to see available commands`);
+program.on("command:*", () => {
+  console.error(`${colors.red}✗${colors.reset} Invalid command: ${program.args.join(" ")}`);
+  console.log(
+    `${colors.yellow}ℹ${colors.reset} Use 'react-native-dynamic-activities help' to see available commands`,
+  );
   process.exit(1);
 });
 

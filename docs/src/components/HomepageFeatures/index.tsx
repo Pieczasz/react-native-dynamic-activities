@@ -1,18 +1,18 @@
-import type { ReactNode } from 'react';
-import clsx from 'clsx';
-import Heading from '@theme/Heading';
-import styles from './styles.module.css';
+import Heading from "@theme/Heading";
+import clsx from "clsx";
+import type { ReactNode } from "react";
+import styles from "./styles.module.css";
 
 type FeatureItem = {
 	title: string;
-	Svg: React.ComponentType<React.ComponentProps<'svg'>>;
+	Svg: React.ComponentType<React.ComponentProps<"svg">>;
 	description: ReactNode;
 };
 
 const FeatureList: FeatureItem[] = [
 	{
-		title: 'Type-Safe & Modern',
-		Svg: require('@site/static/img/ts-logo.svg').default,
+		title: "Type-Safe & Modern",
+		Svg: require("@site/static/img/ts-logo.svg").default,
 		description: (
 			<>
 				Built with Nitro Modules for JSI-based performance and complete
@@ -22,8 +22,8 @@ const FeatureList: FeatureItem[] = [
 		),
 	},
 	{
-		title: 'iOS Live Activities',
-		Svg: require('@site/static/img/live-activities-icon.svg').default,
+		title: "iOS Live Activities",
+		Svg: require("@site/static/img/live-activities-icon.svg").default,
 		description: (
 			<>
 				Create beautiful Live Activities that appear in the Dynamic Island and
@@ -33,8 +33,8 @@ const FeatureList: FeatureItem[] = [
 		),
 	},
 	{
-		title: 'Widget Generation',
-		Svg: require('@site/static/img/cli.svg').default,
+		title: "Widget Generation",
+		Svg: require("@site/static/img/cli.svg").default,
 		description: (
 			<>
 				Powerful CLI tools to generate SwiftUI widget templates automatically.
@@ -47,7 +47,7 @@ const FeatureList: FeatureItem[] = [
 
 function Feature({ title, Svg, description }: FeatureItem) {
 	return (
-		<div className={clsx('col col--4')}>
+		<div className={clsx("col col--4")}>
 			<div className="text--center">
 				<Svg className={styles.featureSvg} role="img" />
 			</div>

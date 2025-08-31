@@ -1,10 +1,24 @@
-# react-native-dynamic-activities
+<p align="center">
+  <img src="./docs/static/img/rnda-baner.png" alt="React Native Dynamic Activities" width="960" />
+</p>
 
-A Nitro Modules powered React Native library to integrate iOS Live Activities with a type-safe, minimal API.
+<h1 align="center">react-native-dynamic-activities</h1>
+
+<p align="center">
+  A Nitro Modules powered React Native library to integrate iOS Live Activities with a type-safe, minimal API.
+</p>
 
 [![Version](https://img.shields.io/npm/v/react-native-dynamic-activities.svg)](https://www.npmjs.com/package/react-native-dynamic-activities)
 [![Downloads](https://img.shields.io/npm/dm/react-native-dynamic-activities.svg)](https://www.npmjs.com/package/react-native-dynamic-activities)
 [![License](https://img.shields.io/npm/l/react-native-dynamic-activities.svg)](LICENSE)
+
+## Overview
+
+React Native Dynamic Activities gives you a simple, type-safe way to start, update, and end iOS Live Activities from JavaScript. It uses Nitro Modules for zero-bridge, JSI-backed performance and auto-generated Swift/TypeScript types.
+
+> Demo video (coming soon)
+>
+> [Placeholder for short demo video/GIF showcasing starting, updating, and ending a Live Activity.]
 
 ## Production readiness
 
@@ -27,6 +41,10 @@ bun add react-native-dynamic-activities react-native-nitro-modules
 ```
 
 Autolinking handles native integration. No manual linking required.
+
+> Screenshot placeholder
+>
+> [Add a screenshot of the example widget running on device/lock screen here.]
 
 ## iOS setup
 
@@ -54,17 +72,17 @@ For Expo managed workflow, add the config plugin:
 ```javascript
 // app.config.js
 export default {
-  expo: {
-    plugins: [
-      [
-        "react-native-dynamic-activities",
-        {
-          widgetName: "MyAppWidget",
-          activityName: "MyActivity"
-        }
-      ]
-    ]
-  }
+	expo: {
+		plugins: [
+			[
+				'react-native-dynamic-activities',
+				{
+					widgetName: 'MyAppWidget',
+					activityName: 'MyActivity',
+				},
+			],
+		],
+	},
 };
 ```
 
@@ -131,14 +149,16 @@ struct TimerLiveActivity: Widget {
 
 Note: The JS-facing types (`LiveActivityAttributes`, `LiveActivityContent`) should semantically match your Swift `ActivityAttributes` and `ContentState` fields you use in the widget.
 
+> Tip: Keep your Swift attributes and the TS interfaces aligned for predictable rendering in your Widget UI.
+
 ## Usage
 
 ```ts
 import {
-  DynamicActivities,
-  type LiveActivityAttributes,
-  type LiveActivityContent,
-} from "react-native-dynamic-activities";
+	DynamicActivities,
+	type LiveActivityAttributes,
+	type LiveActivityContent,
+} from 'react-native-dynamic-activities';
 
 // Check support and OS version
 const info = await DynamicActivities.areLiveActivitiesSupported();
@@ -146,26 +166,26 @@ const info = await DynamicActivities.areLiveActivitiesSupported();
 
 // Start an activity
 const attributes: LiveActivityAttributes = {
-  title: "Timer",
-  body: "Counting down",
+	title: 'Timer',
+	body: 'Counting down',
 };
-const content: LiveActivityContent = { state: "active", relevanceScore: 1 };
+const content: LiveActivityContent = { state: 'active', relevanceScore: 1 };
 const { activityId, pushToken } = await DynamicActivities.startLiveActivity(
-  attributes,
-  content
+	attributes,
+	content
 );
 
 // Update activity
 await DynamicActivities.updateLiveActivity(activityId, {
-  state: "active",
-  relevanceScore: 0.8,
+	state: 'active',
+	relevanceScore: 0.8,
 });
 
 // End activity
 await DynamicActivities.endLiveActivity(
-  activityId,
-  { state: "ended" },
-  "default"
+	activityId,
+	{ state: 'ended' },
+	'default'
 );
 ```
 
@@ -175,20 +195,20 @@ Native errors are normalized with helpful messages and codes (matching ActivityA
 
 ```ts
 import {
-  LiveActivityErrorFactory,
-  isLiveActivityError,
-  LiveActivityErrorCode,
-} from "react-native-dynamic-activities";
+	LiveActivityErrorFactory,
+	isLiveActivityError,
+	LiveActivityErrorCode,
+} from 'react-native-dynamic-activities';
 
 try {
-  await DynamicActivities.startLiveActivity(attributes, content);
+	await DynamicActivities.startLiveActivity(attributes, content);
 } catch (e) {
-  const err = LiveActivityErrorFactory.createErrorFromNativeError(e);
-  if (isLiveActivityError(err)) {
-    if (err.code === LiveActivityErrorCode.DENIED) {
-      // guide user to enable in Settings
-    }
-  }
+	const err = LiveActivityErrorFactory.createErrorFromNativeError(e);
+	if (isLiveActivityError(err)) {
+		if (err.code === LiveActivityErrorCode.DENIED) {
+			// guide user to enable in Settings
+		}
+	}
 }
 ```
 
