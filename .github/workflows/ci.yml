@@ -16,57 +16,50 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: lts/*
-          cache: npm
+          bun-version: latest
       - name: Install dependencies
-        run: npm ci
+        run: bun install
       - name: Validate current commit (push)
         if: github.event_name == 'push'
-        run: npx commitlint --last --verbose
+        run: bunx commitlint --last --verbose
       - name: Validate PR commits
         if: github.event_name == 'pull_request'
-        run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+        run: bunx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
 
   build-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: lts/*
-          cache: npm
+          bun-version: latest
       - name: Install dependencies
-        run: npm ci
+        run: bun install
       - name: Lint
-        run: npm run lint
+        run: bun run lint
       - name: Typecheck
-        run: npm run typecheck
+        run: bun run typecheck
       - name: Build
-        run: npm run build
+        run: bun run build
       - name: Test
-        run: npm test -- --silent
+        run: bun run test --silent
 
   codegen-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-          cache: npm
-      - name: Install Node deps
-        run: npm ci
-      - name: Install bun
+      - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
+      - name: Install deps
+        run: bun install
       - name: Run codegen
-        run: npm run codegen
+        run: bun run codegen
       - name: Ensure nitrogen is clean
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then

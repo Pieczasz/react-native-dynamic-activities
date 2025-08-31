@@ -1,11 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 200 200" stroke="#FFC107" aria-hidden="true" width="200" height="200">
   <desc>
     Command Line Streamline Icon: https://streamlinehq.com
   </desc>
-  <!-- Scale original 18x18 artwork (with -2 origin) into a 200x200 canvas -->
-  <g transform="translate(22.222222,22.222222) scale(11.111111)">
-    <path stroke-linecap="round" stroke-linejoin="round"
-      d="m4.078125 4.53125 1.8125 1.359375 -1.8125 1.359375m2.71875 0h1.8125m-5.4375 4.984375h8.15625A1.359375 1.359375 0 0 0 12.6875 10.875V3.625a1.359375 1.359375 0 0 0 -1.359375 -1.359375H3.171875A1.359375 1.359375 0 0 0 1.8125 3.625v7.25a1.359375 1.359375 0 0 0 1.359375 1.359375Z"
-      stroke-width="0.54" />
+  <g transform="matrix(14.400321, 0, 0, 14.400321, -4.402326, -4.402326)" style="">
+    <path stroke-linecap="round" stroke-linejoin="round" d="m4.078125 4.53125 1.8125 1.359375 -1.8125 1.359375m2.71875 0h1.8125m-5.4375 4.984375h8.15625A1.359375 1.359375 0 0 0 12.6875 10.875V3.625a1.359375 1.359375 0 0 0 -1.359375 -1.359375H3.171875A1.359375 1.359375 0 0 0 1.8125 3.625v7.25a1.359375 1.359375 0 0 0 1.359375 1.359375Z" stroke-width="0.54"/>
   </g>
 </svg>

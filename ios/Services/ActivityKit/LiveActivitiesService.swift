@@ -355,6 +355,7 @@ private extension LiveActivitiesService {
 }
 
 // MARK: - Error Mapping Helpers
+
 // (Centralized in ios/Errors/ErrorMapping.swift)
 
 // MARK: - Data Extensions
