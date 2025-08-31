@@ -20,9 +20,16 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro"
+            to="/getting-started"
           >
-            Docusaurus Tutorial - 5min ⏱️
+            Get Started 🚀
+          </Link>
+          <Link
+            className="button button--primary button--lg"
+            to="/api/overview"
+            style={{ marginLeft: '1rem' }}
+          >
+            API Reference 📖
           </Link>
         </div>
       </div>
@@ -34,8 +41,8 @@ export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext()
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title="React Native Dynamic Activities"
+      description="Beautiful Live Activities for iOS with React Native using Nitro Modules. Type-safe, performant, and easy to integrate."
     >
       <HomepageHeader />
       <main>
