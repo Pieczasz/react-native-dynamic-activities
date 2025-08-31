@@ -62,8 +62,8 @@ jobs:
           bun-version: latest
       - name: Install deps
         run: bun install
-      - name: Run codegen (Nitro only)
-        run: bunx nitro-codegen --logLevel="debug"
+      - name: Run codegen
+        run: bun run codegen
       - name: Ensure nitrogen is clean
         run: |
           if ! git diff --quiet -- nitrogen/generated; then
