@@ -31,7 +31,7 @@ on:
       - 'ios/**'
       - '**/Podfile.lock'
       - '**/bun.lock'
-  - '**/bun.lockb'
+      - '**/bun.lockb'
       - '**/*.podspec'
       - '**/react-native.config.js'
       - '**/nitro.json'

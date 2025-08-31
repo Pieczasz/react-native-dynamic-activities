@@ -9,6 +9,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint-commits:
     runs-on: ubuntu-latest
@@ -58,13 +62,14 @@ jobs:
           bun-version: latest
       - name: Install deps
         run: bun install
-      - name: Run codegen
-        run: bun run codegen
+      - name: Run codegen (Nitro only)
+        run: bunx nitro-codegen --logLevel="debug"
       - name: Ensure nitrogen is clean
         run: |
-          if [[ -n "$(git status --porcelain)" ]]; then
-            echo "Generated files changed. Please commit generated code." >&2
-            git status
+          if ! git diff --quiet -- nitrogen/generated; then
+            echo "Generated files changed in nitrogen/generated. Please commit generated code." >&2
+            git status --porcelain -- nitrogen/generated || true
+            git diff --name-only -- nitrogen/generated || true
             exit 1
           fi
 

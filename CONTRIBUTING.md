@@ -53,7 +53,7 @@ This library uses Nitro Modules for type-safe, JSI-based native bindings. Change
 
 1. Edit specs in `src/specs/*.nitro.ts`.
 2. Run codegen: `npm run codegen`.
-   - This updates `nitrogen/generated/**` (do not edit), rebuilds the package, and runs a small post-script.
+   - This updates `nitrogen/generated/**` (do not edit).
 3. Implement native changes:
    - iOS: `ios/HybridDynamicActivities.swift` (bridge) and `ios/Services/**` (logic)
    - Android: Stub only (rejects with a clear error; iOS-only feature)
