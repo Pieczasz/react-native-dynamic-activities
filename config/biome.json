@@ -1,0 +1,37 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.0/schema.json",
+  "files": {
+    "ignore": [
+      "node_modules/**",
+      "lib/**",
+      "docs/**",
+      "nitrogen/generated/**",
+      "example/ios/**/Pods/**",
+      "example/android/**/.gradle/**",
+      "example/android/**/build/**"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "ignore": []
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "style": {
+        "noVar": "error",
+        "useConst": "error"
+      },
+      "complexity": {
+        "noExtraBooleanCast": "error"
+      },
+      "suspicious": {
+        "noShadowRestrictedNames": "error"
+      }
+    }
+  }
+}

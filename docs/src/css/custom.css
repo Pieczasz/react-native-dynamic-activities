@@ -5,26 +5,56 @@
  */
 
 /* You can override the default Infima variables here. */
+/* WCAG-compliant yellow color scheme */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+	--ifm-color-primary: #b8860b; /* Dark goldenrod - WCAG AA compliant on white */
+	--ifm-color-primary-dark: #a3770a;
+	--ifm-color-primary-darker: #9a7009;
+	--ifm-color-primary-darkest: #7f5d08;
+	--ifm-color-primary-light: #cd940c;
+	--ifm-color-primary-lighter: #d69c0d;
+	--ifm-color-primary-lightest: #e6a90e;
+	--ifm-code-font-size: 95%;
+	--docusaurus-highlighted-code-line-bg: rgba(184, 134, 11, 0.1);
+	/* Dynamic Island color - gray on light theme */
+	--dynamic-island-color: #666;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+[data-theme="dark"] {
+	--ifm-color-primary: #ffd700; /* Gold - bright for dark backgrounds */
+	--ifm-color-primary-dark: #e6c200;
+	--ifm-color-primary-darker: #d9b600;
+	--ifm-color-primary-darkest: #b39500;
+	--ifm-color-primary-light: #ffdc1a;
+	--ifm-color-primary-lighter: #ffdf2a;
+	--ifm-color-primary-lightest: #ffe54d;
+	--docusaurus-highlighted-code-line-bg: rgba(255, 215, 0, 0.2);
+	/* Dynamic Island color - white on dark theme */
+	--dynamic-island-color: #fff;
+}
+
+/* Ensure primary buttons are visible with proper contrast */
+.button--primary {
+	background-color: var(--ifm-color-primary);
+	border-color: var(--ifm-color-primary);
+	color: var(--ifm-font-color-base-inverse);
+}
+
+.button--primary:hover {
+	background-color: var(--ifm-color-primary-dark);
+	border-color: var(--ifm-color-primary-dark);
+	color: var(--ifm-font-color-base-inverse);
+}
+
+[data-theme="dark"] .button--primary {
+	background-color: var(--ifm-color-primary);
+	border-color: var(--ifm-color-primary);
+	color: #000; /* Black text on yellow background for dark theme */
+}
+
+[data-theme="dark"] .button--primary:hover {
+	background-color: var(--ifm-color-primary-dark);
+	border-color: var(--ifm-color-primary-dark);
+	color: #000;
 }

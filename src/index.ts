@@ -1,37 +1,37 @@
-import { NitroModules } from 'react-native-nitro-modules'
-import type { DynamicActivities as DynamicActivitiesSpec } from './specs/LiveActivities.nitro'
+import { NitroModules } from "react-native-nitro-modules";
+import type { DynamicActivities as DynamicActivitiesSpec } from "./specs/LiveActivities.nitro";
 
 export const DynamicActivities =
-  NitroModules.createHybridObject<DynamicActivitiesSpec>('DynamicActivities')
+  NitroModules.createHybridObject<DynamicActivitiesSpec>("DynamicActivities");
 
 export type {
+  LiveActivityAlertConfiguration,
   LiveActivityAttributes,
   LiveActivityContent,
-  LiveActivityPushToken,
-  LiveActivityAlertConfiguration,
   LiveActivityDismissalPolicy,
-  LiveActivityStyle,
+  LiveActivityPushToken,
   LiveActivityState,
+  LiveActivityStyle,
   PushTokenUpdateEvent,
-} from './specs/LiveActivities.nitro'
+} from "./specs/LiveActivities.nitro";
 
 export type {
+  LiveActivityAuthorizationError,
   LiveActivityError,
   LiveActivityErrorInfo,
-  LiveActivityAuthorizationError,
   LiveActivitySystemError,
-} from './specs/LiveActivitiesErrors.nitro'
+} from "./specs/LiveActivitiesErrors.nitro";
 
 export {
+  getErrorSeverity,
+  isAuthorizationError,
+  isLiveActivityError,
+  isSystemError,
+  LIVE_ACTIVITY_ERROR_DOMAIN,
   LiveActivityErrorCode,
   LiveActivityErrorFactory,
   LiveActivityErrorMessages,
-  LiveActivityRecoverySuggestions,
   LiveActivityErrorSeverity,
   LiveActivityErrorSeverityMap,
-  isLiveActivityError,
-  isAuthorizationError,
-  isSystemError,
-  getErrorSeverity,
-  LIVE_ACTIVITY_ERROR_DOMAIN,
-} from './specs/LiveActivitiesErrors.nitro'
+  LiveActivityRecoverySuggestions,
+} from "./specs/LiveActivitiesErrors.nitro";

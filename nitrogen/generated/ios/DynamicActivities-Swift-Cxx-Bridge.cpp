@@ -13,18 +13,50 @@
 
 namespace margelo::nitro::dynamicactivities::bridge::swift {
 
-  // pragma MARK: std::shared_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpec>
-  std::shared_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpec> create_std__shared_ptr_margelo__nitro__dynamicactivities__HybridDynamicActivitiesSpec_(void* _Nonnull swiftUnsafePointer) {
+  // pragma MARK: std::function<void(const LiveActivitiesSupportInfo& /* result */)>
+  Func_void_LiveActivitiesSupportInfo create_Func_void_LiveActivitiesSupportInfo(void* _Nonnull swiftClosureWrapper) noexcept {
+    auto swiftClosure = DynamicActivities::Func_void_LiveActivitiesSupportInfo::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const LiveActivitiesSupportInfo& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
+  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* _Nonnull swiftClosureWrapper) noexcept {
+    auto swiftClosure = DynamicActivities::Func_void_std__exception_ptr::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const std::exception_ptr& error) mutable -> void {
+      swiftClosure.call(error);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const LiveActivityStartResult& /* result */)>
+  Func_void_LiveActivityStartResult create_Func_void_LiveActivityStartResult(void* _Nonnull swiftClosureWrapper) noexcept {
+    auto swiftClosure = DynamicActivities::Func_void_LiveActivityStartResult::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const LiveActivityStartResult& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::function<void()>
+  Func_void create_Func_void(void* _Nonnull swiftClosureWrapper) noexcept {
+    auto swiftClosure = DynamicActivities::Func_void::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)]() mutable -> void {
+      swiftClosure.call();
+    };
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridDynamicActivitiesSpec>
+  std::shared_ptr<HybridDynamicActivitiesSpec> create_std__shared_ptr_HybridDynamicActivitiesSpec_(void* _Nonnull swiftUnsafePointer) noexcept {
     DynamicActivities::HybridDynamicActivitiesSpec_cxx swiftPart = DynamicActivities::HybridDynamicActivitiesSpec_cxx::fromUnsafe(swiftUnsafePointer);
     return std::make_shared<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpecSwift>(swiftPart);
   }
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__dynamicactivities__HybridDynamicActivitiesSpec_(std__shared_ptr_margelo__nitro__dynamicactivities__HybridDynamicActivitiesSpec_ cppType) {
+  void* _Nonnull get_std__shared_ptr_HybridDynamicActivitiesSpec_(std__shared_ptr_HybridDynamicActivitiesSpec_ cppType) noexcept {
     std::shared_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpecSwift>(cppType);
-  #ifdef NITRO_DEBUG
+    #ifdef NITRO_DEBUG
     if (swiftWrapper == nullptr) [[unlikely]] {
       throw std::runtime_error("Class \"HybridDynamicActivitiesSpec\" is not implemented in Swift!");
     }
-  #endif
+    #endif
     DynamicActivities::HybridDynamicActivitiesSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }

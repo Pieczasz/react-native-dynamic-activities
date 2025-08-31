@@ -1,122 +1,135 @@
-import Foundation
 import ActivityKit
+import Foundation
+import NitroModules
 
-class HybridDynamicActivities: HybridDynamicActivitiesSpec {
-    func sum(num1: Double, num2: Double) throws -> Double {
-        return num1 + num2
-    }
-    /**
-     * Check if Live Activities are supported on this device
-     * @returns true if Live Activities are supported, false otherwise
-     */
-    func areLiveActivitiesSupported() -> Bool {
-        // TODO: Implement actual Live Activities support check
-        if #available(iOS 16.1, *) {
-            return ActivityAuthorizationInfo().areActivitiesEnabled
-        } else {
-            return false
-        }
-    }
-    
+// MARK: - Hybrid Bridge Implementation
 
-    func startLiveActivity(
-        attributes: [String: Any],
-        content: [String: Any],
-        pushToken: [String: Any]?,
-        style: String?,
-        alertConfiguration: [String: Any]?,
-        start: Date?
-    ) throws -> [String: Any] {
-        // TODO: Implement actual Live Activity start logic
-        guard #available(iOS 16.1, *) else {
-            throw createSystemError(code: "UNSUPPORTED_VERSION", message: "Live Activities require iOS 16.1 or later")
-        }
-        
-        let authInfo = ActivityAuthorizationInfo()
-        if !authInfo.areActivitiesEnabled {
-            throw createAuthorizationError(code: "disabledByUser", message: "Live Activities are disabled by the user")
-        }
-        
-        return [
-            "activityId": UUID().uuidString,
-            "pushToken": pushToken?["token"] as? String
-        ]
-    }
-    
+/**
+ * Nitro bridge that connects JavaScript to iOS ActivityKit.
+ *
+ * This class implements the generated `HybridDynamicActivitiesSpec` protocol,
+ * providing type-safe communication between JS and native ActivityKit APIs.
+ * All operations are delegated to `LiveActivitiesService` for business logic.
+ *
+ * **Architecture:**
+ * - Converts Nitro types to/from Swift types
+ * - Maps native errors to structured JS errors
+ * - Handles async operations via Nitro Promises
+ */
+final class HybridDynamicActivities: HybridDynamicActivitiesSpec {
+  // MARK: - Properties
 
-    func updateLiveActivity(
-        activityId: String,
-        content: [String: Any],
-        alertConfiguration: [String: Any]?,
-        timestamp: Date?
-    ) throws {
-        guard #available(iOS 16.1, *) else {
-            throw createSystemError(code: "UNSUPPORTED_VERSION", message: "Live Activities require iOS 16.1 or later")
-        }
-        // TODO: Implement actual Live Activity update logic
-        let authInfo = ActivityAuthorizationInfo()
-        if !authInfo.areActivitiesEnabled {
-            throw createAuthorizationError(code: "disabledByUser", message: "Live Activities are disabled by the user")
-        }
-        
+  private let service = LiveActivitiesService()
+
+  // MARK: - LiveActivities Support
+
+  func areLiveActivitiesSupported() throws -> Promise<LiveActivitiesSupportInfo> {
+    let promise = Promise<LiveActivitiesSupportInfo>()
+    let info = service.areSupported()
+    promise.resolve(withResult: info)
+    return promise
+  }
+
+  // MARK: - Activity Lifecycle
+
+  func startLiveActivity(
+    attributes: LiveActivityAttributes,
+    content: LiveActivityContent,
+    pushToken: LiveActivityPushToken?,
+    style: LiveActivityStyle?,
+    alertConfiguration: LiveActivityAlertConfiguration?,
+    start: Date?
+  ) throws -> Promise<LiveActivityStartResult> {
+    executeWithPromise { [weak self] in
+      try self?.service.startActivity(
+        attributes: attributes,
+        content: content,
+        pushToken: pushToken,
+        style: style,
+        alertConfiguration: alertConfiguration,
+        start: start
+      )
     }
-    
-    func endLiveActivity(
-        activityId: String,
-        content: [String: Any],
-        dismissalPolicy: [String: Any]?
-    ) throws {
-        // TODO: Implement actual Live Activity end logic
-        guard #available(iOS 16.1, *) else {
-            throw createSystemError(code: "UNSUPPORTED_VERSION", message: "Live Activities require iOS 16.1 or later")
-        }
-        
-        let authInfo = ActivityAuthorizationInfo()
-        if !authInfo.areActivitiesEnabled {
-            throw createAuthorizationError(code: "disabledByUser", message: "Live Activities are disabled by the user")
-        }
-        
+  }
+
+  func updateLiveActivity(
+    activityId: String,
+    content: LiveActivityContent,
+    alertConfiguration: LiveActivityAlertConfiguration?,
+    timestamp: Date?
+  ) throws -> Promise<Void> {
+    executeWithPromise { [weak self] in
+      try self?.service.updateActivity(
+        activityId: activityId,
+        content: content,
+        alertConfiguration: alertConfiguration,
+        timestamp: timestamp
+      )
     }
-    
-    private func createAuthorizationError(code: String, message: String) -> NSError {
-        return NSError(
-            domain: "LiveActivityAuthorizationError",
-            code: 1001,
-            userInfo: [
-                "code": code,
-                "message": message,
-                "timestamp": Date().timeIntervalSince1970
-            ]
-        )
+  }
+
+  func endLiveActivity(
+    activityId: String,
+    content: LiveActivityContent,
+    dismissalPolicy: LiveActivityDismissalPolicy?,
+    timestamp: Date?
+  ) throws -> Promise<Void> {
+    executeWithPromise { [weak self] in
+      try self?.service.endActivity(
+        activityId: activityId,
+        content: content,
+        dismissalPolicy: dismissalPolicy,
+        timestamp: timestamp
+      )
     }
-    
-    private func createSystemError(code: String, message: String) -> NSError {
-        return NSError(
-            domain: "LiveActivitySystemError",
-            code: 2001,
-            userInfo: [
-                "code": code,
-                "message": message,
-                "timestamp": Date().timeIntervalSince1970
-            ]
-        )
+  }
+}
+
+// MARK: - Private Helpers
+
+private extension HybridDynamicActivities {
+  /**
+   * Executes service operations with consistent error handling and promise management.
+   *
+   * - Parameter operation: The service operation to execute
+   * - Returns: A Nitro Promise with proper error mapping
+   */
+  func executeWithPromise<T>(
+    operation: () throws -> T?
+  ) -> Promise<T> {
+    let promise = Promise<T>()
+
+    do {
+      guard let result = try operation() else {
+        promise.reject(withError: makeNSError(
+          code: "operationFailed",
+          message: "Service operation returned nil",
+          domain: "LiveActivitySystemError"
+        ))
+        return promise
+      }
+      promise.resolve(withResult: result)
+    } catch {
+      promise.reject(withError: mapError(error))
     }
-    
-    // MARK: - ActivityAuthorizationError Mapping
-    
-    @available(iOS 16.1, *)
-    private func mapActivityAuthorizationError(_ error: ActivityAuthorizationError) -> NSError {
-        let (code, message) = switch error {
-        case .disabledByUser:
-            ("disabledByUser", "Live Activities are disabled by the user. Please ask the user to enable them in Settings.")
-        case .frequentPushes:
-            ("frequentPushes", "Too many push notifications have been sent. Please reduce the frequency of updates.")
-        case .insufficientPrivilege:
-            ("insufficientPrivilege", "The app does not have sufficient permissions to create Live Activities.")
-        @unknown default:
-            ("UNKNOWN_ERROR", "An unknown authorization error occurred.")
-        }
-        
-        return createAuthorizationError(code: code, message: message)
+
+    return promise
+  }
+
+  /**
+   * Maps native errors to structured JS errors with proper typing.
+   */
+  func mapError(_ error: Error) -> NSError {
+    if #available(iOS 16.2, *),
+       let authError = error as? ActivityAuthorizationError
+    {
+      return mapAuthorizationError(authError)
     }
+
+    return makeNSError(
+      code: "unknownError",
+      message: error.localizedDescription,
+      domain: "LiveActivitySystemError"
+    )
+  }
 }

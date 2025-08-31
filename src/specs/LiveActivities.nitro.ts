@@ -1,53 +1,56 @@
-import type { HybridObject } from 'react-native-nitro-modules'
+import type { HybridObject } from "react-native-nitro-modules";
 
 export interface LiveActivityAttributes {
-  title: string
-  body: string
+  title: string;
+  body: string;
 }
 
-export type LiveActivityState =
-  | 'active'
-  | 'dismissed'
-  | 'pending'
-  | 'stale'
-  | 'ended'
+export type LiveActivityState = "active" | "dismissed" | "pending" | "stale" | "ended";
 
 export interface LiveActivityContent {
-  state: LiveActivityState
-  staleDate?: Date
-  relevanceScore?: number
+  state: LiveActivityState;
+  staleDate?: Date;
+  relevanceScore?: number;
 }
 
 export interface LiveActivityPushToken {
-  token: string
-  channel: string
+  token: string;
 }
 
-export type LiveActivityStyle = 'standard' | 'transient'
+export type LiveActivityStyle = "standard" | "transient";
 
 export interface LiveActivityAlertConfiguration {
-  title: string
-  body: string
-  sound: string
+  title: string;
+  body: string;
+  sound: string;
 }
 
-export type LiveActivityDismissalPolicy =
-  | { policy: 'default' }
-  | { policy: 'immediate' }
-  | { policy: 'after'; date: Date }
+// TODO: Add support for after date
+export type LiveActivityDismissalPolicy = "default" | "immediate" | "after";
 
 export interface PushTokenUpdateEvent {
-  activityId: string
-  token: string
+  activityId: string;
+  /** Hex-encoded APNs token previously provided by native */
+  token: string;
 }
 
-export interface DynamicActivities
-  extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
+export interface LiveActivitiesSupportInfo {
+  supported: boolean;
+  version: number;
+  comment: string;
+}
+
+export interface LiveActivityStartResult {
+  activityId: string;
+  pushToken?: string;
+}
+
+export interface DynamicActivities extends HybridObject<{ ios: "swift"; android: "kotlin" }> {
   /**
    * Check if Live Activities are supported on this device
    * @returns true if Live Activities are supported, false otherwise
    */
-  areLiveActivitiesSupported(): boolean
+  areLiveActivitiesSupported(): Promise<LiveActivitiesSupportInfo>;
 
   /**
    * Start a new Live Activity
@@ -67,14 +70,14 @@ export interface DynamicActivities
 
     style?: LiveActivityStyle,
     alertConfiguration?: LiveActivityAlertConfiguration,
-    start?: Date
-  ): Promise<{ activityId: string; pushToken?: string }>
+    start?: Date,
+  ): Promise<LiveActivityStartResult>;
 
   /**
    * Update an existing Live Activity
    * @param activityId - The ID of the activity to update
    * @param content - The new content for the Live Activity
-   * @param alertConfiguration - Optional alert configuration (iOS 16.2+ not 26.0+ as in request)
+   * @param alertConfiguration - Optional alert configuration (iOS 26.0+)
    * @param timestamp - Optional timestamp (iOS 17.2+)
    * @throws {LiveActivityError} When activity is not found, already ended, or content is invalid
    */
@@ -82,19 +85,21 @@ export interface DynamicActivities
     activityId: string,
     content: LiveActivityContent,
     alertConfiguration?: LiveActivityAlertConfiguration,
-    timestamp?: Date
-  ): Promise<void>
+    timestamp?: Date,
+  ): Promise<void>;
 
   /**
    * End a Live Activity
    * @param activityId - The ID of the activity to end
    * @param content - The final content for the Live Activity
    * @param dismissalPolicy - Optional dismissal policy
+   * @param timestamp - Optional timestamp (iOS 17.2+)
    * @throws {LiveActivityError} When activity is not found or already ended
    */
   endLiveActivity(
     activityId: string,
     content: LiveActivityContent,
-    dismissalPolicy?: LiveActivityDismissalPolicy
-  ): Promise<void>
+    dismissalPolicy?: LiveActivityDismissalPolicy,
+    timestamp?: Date,
+  ): Promise<void>;
 }

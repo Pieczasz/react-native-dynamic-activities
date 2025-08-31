@@ -12,6 +12,7 @@ on:
       - 'cpp/**'
       - 'android/**'
       - '**/bun.lock'
+      - '**/bun.lockb'
       - '**/react-native.config.js'
       - '**/nitro.json'
   pull_request:
@@ -23,6 +24,7 @@ on:
       - 'cpp/**'
       - 'android/**'
       - '**/bun.lock'
+      - '**/bun.lockb'
       - '**/react-native.config.js'
       - '**/nitro.json'
 

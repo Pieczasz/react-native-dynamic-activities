@@ -14,12 +14,16 @@ public protocol HybridDynamicActivitiesSpec_protocol: HybridObject {
   
 
   // Methods
-  func sum(num1: Double, num2: Double) throws -> Double
+  func areLiveActivitiesSupported() throws -> Promise<LiveActivitiesSupportInfo>
+  func startLiveActivity(attributes: LiveActivityAttributes, content: LiveActivityContent, pushToken: LiveActivityPushToken?, style: LiveActivityStyle?, alertConfiguration: LiveActivityAlertConfiguration?, start: Date?) throws -> Promise<LiveActivityStartResult>
+  func updateLiveActivity(activityId: String, content: LiveActivityContent, alertConfiguration: LiveActivityAlertConfiguration?, timestamp: Date?) throws -> Promise<Void>
+  func endLiveActivity(activityId: String, content: LiveActivityContent, dismissalPolicy: LiveActivityDismissalPolicy?, timestamp: Date?) throws -> Promise<Void>
 }
 
 /// See ``HybridDynamicActivitiesSpec``
-public class HybridDynamicActivitiesSpec_base {
+open class HybridDynamicActivitiesSpec_base {
   private weak var cxxWrapper: HybridDynamicActivitiesSpec_cxx? = nil
+  public init() { }
   public func getCxxWrapper() -> HybridDynamicActivitiesSpec_cxx {
   #if DEBUG
     guard self is HybridDynamicActivitiesSpec else {

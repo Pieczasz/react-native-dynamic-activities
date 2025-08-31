@@ -10,19 +10,50 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridDynamicActivitiesSpec` to properly resolve imports.
 namespace margelo::nitro::dynamicactivities { class HybridDynamicActivitiesSpec; }
+// Forward declaration of `LiveActivitiesSupportInfo` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivitiesSupportInfo; }
+// Forward declaration of `LiveActivityAlertConfiguration` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityAlertConfiguration; }
+// Forward declaration of `LiveActivityAttributes` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityAttributes; }
+// Forward declaration of `LiveActivityContent` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityContent; }
+// Forward declaration of `LiveActivityDismissalPolicy` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { enum class LiveActivityDismissalPolicy; }
+// Forward declaration of `LiveActivityPushToken` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityPushToken; }
+// Forward declaration of `LiveActivityStartResult` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityStartResult; }
+// Forward declaration of `LiveActivityState` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { enum class LiveActivityState; }
+// Forward declaration of `LiveActivityStyle` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { enum class LiveActivityStyle; }
 
 // Include C++ defined types
 #include "HybridDynamicActivitiesSpec.hpp"
+#include "LiveActivitiesSupportInfo.hpp"
+#include "LiveActivityAlertConfiguration.hpp"
+#include "LiveActivityAttributes.hpp"
+#include "LiveActivityContent.hpp"
+#include "LiveActivityDismissalPolicy.hpp"
+#include "LiveActivityPushToken.hpp"
+#include "LiveActivityStartResult.hpp"
+#include "LiveActivityState.hpp"
+#include "LiveActivityStyle.hpp"
+#include <NitroModules/Promise.hpp>
 #include <NitroModules/Result.hpp>
+#include <chrono>
 #include <exception>
 #include <memory>
+#include <optional>
+#include <string>
 
 // C++ helpers for Swift
 #include "DynamicActivities-Swift-Cxx-Bridge.hpp"
 
 // Common C++ types used in Swift
 #include <NitroModules/ArrayBufferHolder.hpp>
-#include <NitroModules/AnyMapHolder.hpp>
+#include <NitroModules/AnyMapUtils.hpp>
 #include <NitroModules/RuntimeError.hpp>
 #include <NitroModules/DateToChronoDate.hpp>
 

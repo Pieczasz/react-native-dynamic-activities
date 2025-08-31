@@ -7,9 +7,49 @@
 
 #include "JHybridDynamicActivitiesSpec.hpp"
 
+// Forward declaration of `LiveActivitiesSupportInfo` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivitiesSupportInfo; }
+// Forward declaration of `LiveActivityStartResult` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityStartResult; }
+// Forward declaration of `LiveActivityAttributes` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityAttributes; }
+// Forward declaration of `LiveActivityContent` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityContent; }
+// Forward declaration of `LiveActivityState` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { enum class LiveActivityState; }
+// Forward declaration of `LiveActivityPushToken` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityPushToken; }
+// Forward declaration of `LiveActivityStyle` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { enum class LiveActivityStyle; }
+// Forward declaration of `LiveActivityAlertConfiguration` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { struct LiveActivityAlertConfiguration; }
+// Forward declaration of `LiveActivityDismissalPolicy` to properly resolve imports.
+namespace margelo::nitro::dynamicactivities { enum class LiveActivityDismissalPolicy; }
 
-
-
+#include "LiveActivitiesSupportInfo.hpp"
+#include <NitroModules/Promise.hpp>
+#include <NitroModules/JPromise.hpp>
+#include "JLiveActivitiesSupportInfo.hpp"
+#include <string>
+#include "LiveActivityStartResult.hpp"
+#include "JLiveActivityStartResult.hpp"
+#include <optional>
+#include "LiveActivityAttributes.hpp"
+#include "JLiveActivityAttributes.hpp"
+#include "LiveActivityContent.hpp"
+#include "JLiveActivityContent.hpp"
+#include "LiveActivityState.hpp"
+#include "JLiveActivityState.hpp"
+#include <chrono>
+#include <NitroModules/JInstant.hpp>
+#include "LiveActivityPushToken.hpp"
+#include "JLiveActivityPushToken.hpp"
+#include "LiveActivityStyle.hpp"
+#include "JLiveActivityStyle.hpp"
+#include "LiveActivityAlertConfiguration.hpp"
+#include "JLiveActivityAlertConfiguration.hpp"
+#include "LiveActivityDismissalPolicy.hpp"
+#include "JLiveActivityDismissalPolicy.hpp"
 
 namespace margelo::nitro::dynamicactivities {
 
@@ -28,14 +68,76 @@ namespace margelo::nitro::dynamicactivities {
     return method(_javaPart);
   }
 
+  void JHybridDynamicActivitiesSpec::dispose() noexcept {
+    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
+    method(_javaPart);
+  }
+
   // Properties
   
 
   // Methods
-  double JHybridDynamicActivitiesSpec::sum(double num1, double num2) {
-    static const auto method = javaClassStatic()->getMethod<double(double /* num1 */, double /* num2 */)>("sum");
-    auto __result = method(_javaPart, num1, num2);
-    return __result;
+  std::shared_ptr<Promise<LiveActivitiesSupportInfo>> JHybridDynamicActivitiesSpec::areLiveActivitiesSupported() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("areLiveActivitiesSupported");
+    auto __result = method(_javaPart);
+    return [&]() {
+      auto __promise = Promise<LiveActivitiesSupportInfo>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JLiveActivitiesSupportInfo>(__boxedResult);
+        __promise->resolve(__result->toCpp());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<LiveActivityStartResult>> JHybridDynamicActivitiesSpec::startLiveActivity(const LiveActivityAttributes& attributes, const LiveActivityContent& content, const std::optional<LiveActivityPushToken>& pushToken, std::optional<LiveActivityStyle> style, const std::optional<LiveActivityAlertConfiguration>& alertConfiguration, std::optional<std::chrono::system_clock::time_point> start) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JLiveActivityAttributes> /* attributes */, jni::alias_ref<JLiveActivityContent> /* content */, jni::alias_ref<JLiveActivityPushToken> /* pushToken */, jni::alias_ref<JLiveActivityStyle> /* style */, jni::alias_ref<JLiveActivityAlertConfiguration> /* alertConfiguration */, jni::alias_ref<JInstant> /* start */)>("startLiveActivity");
+    auto __result = method(_javaPart, JLiveActivityAttributes::fromCpp(attributes), JLiveActivityContent::fromCpp(content), pushToken.has_value() ? JLiveActivityPushToken::fromCpp(pushToken.value()) : nullptr, style.has_value() ? JLiveActivityStyle::fromCpp(style.value()) : nullptr, alertConfiguration.has_value() ? JLiveActivityAlertConfiguration::fromCpp(alertConfiguration.value()) : nullptr, start.has_value() ? JInstant::fromChrono(start.value()) : nullptr);
+    return [&]() {
+      auto __promise = Promise<LiveActivityStartResult>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JLiveActivityStartResult>(__boxedResult);
+        __promise->resolve(__result->toCpp());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<void>> JHybridDynamicActivitiesSpec::updateLiveActivity(const std::string& activityId, const LiveActivityContent& content, const std::optional<LiveActivityAlertConfiguration>& alertConfiguration, std::optional<std::chrono::system_clock::time_point> timestamp) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* activityId */, jni::alias_ref<JLiveActivityContent> /* content */, jni::alias_ref<JLiveActivityAlertConfiguration> /* alertConfiguration */, jni::alias_ref<JInstant> /* timestamp */)>("updateLiveActivity");
+    auto __result = method(_javaPart, jni::make_jstring(activityId), JLiveActivityContent::fromCpp(content), alertConfiguration.has_value() ? JLiveActivityAlertConfiguration::fromCpp(alertConfiguration.value()) : nullptr, timestamp.has_value() ? JInstant::fromChrono(timestamp.value()) : nullptr);
+    return [&]() {
+      auto __promise = Promise<void>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
+        __promise->resolve();
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<void>> JHybridDynamicActivitiesSpec::endLiveActivity(const std::string& activityId, const LiveActivityContent& content, std::optional<LiveActivityDismissalPolicy> dismissalPolicy, std::optional<std::chrono::system_clock::time_point> timestamp) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* activityId */, jni::alias_ref<JLiveActivityContent> /* content */, jni::alias_ref<JLiveActivityDismissalPolicy> /* dismissalPolicy */, jni::alias_ref<JInstant> /* timestamp */)>("endLiveActivity");
+    auto __result = method(_javaPart, jni::make_jstring(activityId), JLiveActivityContent::fromCpp(content), dismissalPolicy.has_value() ? JLiveActivityDismissalPolicy::fromCpp(dismissalPolicy.value()) : nullptr, timestamp.has_value() ? JInstant::fromChrono(timestamp.value()) : nullptr);
+    return [&]() {
+      auto __promise = Promise<void>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {
+        __promise->resolve();
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
   }
 
 } // namespace margelo::nitro::dynamicactivities

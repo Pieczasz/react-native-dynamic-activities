@@ -29,6 +29,7 @@ namespace margelo::nitro::dynamicactivities {
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridDynamicActivitiesSpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridDynamicActivitiesSpec::TAG),
+      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -39,6 +40,7 @@ namespace margelo::nitro::dynamicactivities {
 
   public:
     size_t getExternalMemorySize() noexcept override;
+    void dispose() noexcept override;
 
   public:
     inline const jni::global_ref<JHybridDynamicActivitiesSpec::javaobject>& getJavaPart() const noexcept {
@@ -51,7 +53,10 @@ namespace margelo::nitro::dynamicactivities {
 
   public:
     // Methods
-    double sum(double num1, double num2) override;
+    std::shared_ptr<Promise<LiveActivitiesSupportInfo>> areLiveActivitiesSupported() override;
+    std::shared_ptr<Promise<LiveActivityStartResult>> startLiveActivity(const LiveActivityAttributes& attributes, const LiveActivityContent& content, const std::optional<LiveActivityPushToken>& pushToken, std::optional<LiveActivityStyle> style, const std::optional<LiveActivityAlertConfiguration>& alertConfiguration, std::optional<std::chrono::system_clock::time_point> start) override;
+    std::shared_ptr<Promise<void>> updateLiveActivity(const std::string& activityId, const LiveActivityContent& content, const std::optional<LiveActivityAlertConfiguration>& alertConfiguration, std::optional<std::chrono::system_clock::time_point> timestamp) override;
+    std::shared_ptr<Promise<void>> endLiveActivity(const std::string& activityId, const LiveActivityContent& content, std::optional<LiveActivityDismissalPolicy> dismissalPolicy, std::optional<std::chrono::system_clock::time_point> timestamp) override;
 
   private:
     friend HybridBase;

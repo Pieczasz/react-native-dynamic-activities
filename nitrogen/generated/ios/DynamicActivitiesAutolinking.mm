@@ -24,7 +24,7 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "DynamicActivities",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<margelo::nitro::dynamicactivities::HybridDynamicActivitiesSpec> hybridObject = DynamicActivities::DynamicActivitiesAutolinking::createDynamicActivities();
+      std::shared_ptr<HybridDynamicActivitiesSpec> hybridObject = DynamicActivities::DynamicActivitiesAutolinking::createDynamicActivities();
       return hybridObject;
     }
   );
