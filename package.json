@@ -78,7 +78,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.0",
 		"@commitlint/config-conventional": "^17.0.2",
-		"@react-native/metro-config": "^0.80.1",
+		"@react-native/metro-config": "^0.81.1",
 		"@release-it/conventional-changelog": "^9.0.0",
 		"@types/jest": "^29.5.14",
 		"@types/node": "^24.3.0",
