@@ -42,10 +42,13 @@ struct GenericActivityAttributes: ActivityAttributes {
 
 /**
  * Registry for tracking active Live Activities.
+ *
+ * Uses type-safe storage with generic constraints while maintaining
+ * compatibility with different ActivityAttributes types.
  */
 private final class ActivityRegistry {
   static let shared = ActivityRegistry()
-  private var activities: [String: Any] = [:] // Any to support different Activity types
+  private var activities: [String: Any] = [:] // Any required for different Activity<T> types
   private let queue = DispatchQueue(label: "com.dynamicactivities.registry", qos: .userInitiated)
 
   private init() {}
@@ -60,13 +63,21 @@ private final class ActivityRegistry {
   @available(iOS 16.1, *)
   func getActivity<T: ActivityAttributes>(id: String, type _: T.Type) -> Activity<T>? {
     queue.sync { [weak self] in
-      return self?.activities[id] as? Activity<T>
+      guard let activity = self?.activities[id] else { return nil }
+      return activity as? Activity<T>
     }
   }
 
   func removeActivity(id: String) {
     queue.async { [weak self] in
       self?.activities.removeValue(forKey: id)
+    }
+  }
+
+  /// Get all active activity IDs for debugging/monitoring
+  func getAllActivityIds() -> [String] {
+    queue.sync { [weak self] in
+      Array(self?.activities.keys ?? [])
     }
   }
 }
@@ -106,19 +117,19 @@ final class LiveActivitiesService {
       LiveActivitiesSupportInfo(
         supported: ActivityAuthorizationInfo().areActivitiesEnabled,
         version: 18.0,
-        comment: "Limited: no alertConfiguration/start parameters in requests (available in iOS 26.0+)"
+        comment: "ActivityStyle support available, no alertConfiguration/start parameters in requests (available in iOS 26.0+)"
       )
     } else if #available(iOS 17.2, *) {
       LiveActivitiesSupportInfo(
         supported: ActivityAuthorizationInfo().areActivitiesEnabled,
         version: 17.2,
-        comment: "Limited: no style parameter (iOS 18.0+) or alertConfiguration/start in requests (iOS 26.0+)"
+        comment: "Limited: no ActivityStyle parameter (iOS 18.0+) or alertConfiguration/start in requests (iOS 26.0+)"
       )
     } else if #available(iOS 16.2, *) {
       LiveActivitiesSupportInfo(
         supported: ActivityAuthorizationInfo().areActivitiesEnabled,
         version: 16.2,
-        comment: "Basic support: no style, timestamp (iOS 17.2+), or alertConfiguration/start in requests (iOS 26.0+)"
+        comment: "Basic support: no ActivityStyle (iOS 18.0+), timestamp (iOS 17.2+), or alertConfiguration/start in requests (iOS 26.0+)"
       )
     } else if #available(iOS 16.1, *) {
       LiveActivitiesSupportInfo(
@@ -150,7 +161,7 @@ final class LiveActivitiesService {
    *   - content: Initial content state
    *   - pushToken: Optional push token for remote updates
    *   - style: Activity style (iOS 18.0+)
-   *   - alertConfiguration: Alert configuration (iOS 16.2+)
+   *   - alertConfiguration: Alert configuration (iOS 26.0+)
    *   - start: Optional start date (iOS 26.0+)
    * - Returns: Activity ID and push token information
    * - Throws: Authorization or system errors
@@ -159,7 +170,7 @@ final class LiveActivitiesService {
     attributes: LiveActivityAttributes,
     content: LiveActivityContent,
     pushToken _: LiveActivityPushToken?,
-    style _: LiveActivityStyle?,
+    style: LiveActivityStyle?,
     alertConfiguration _: LiveActivityAlertConfiguration?,
     start: Date?
   ) throws -> LiveActivityStartResult {
@@ -186,7 +197,25 @@ final class LiveActivitiesService {
     // Create ActivityKit request
     do {
       let activity: Activity<GenericActivityAttributes>
-      if #available(iOS 16.2, *) {
+
+      if #available(iOS 18.0, *), let style {
+        // iOS 18.0+ with ActivityStyle support
+        let activityStyle: ActivityStyle = switch style {
+        case "standard":
+          .standard
+        case "transient":
+          .transient
+        default:
+          .standard
+        }
+
+        activity = try Activity.request(
+          attributes: genericAttributes,
+          content: .init(state: contentState, staleDate: content.staleDate),
+          style: activityStyle
+        )
+      } else if #available(iOS 16.2, *) {
+        // iOS 16.2+ without ActivityStyle (fallback)
         activity = try Activity.request(
           attributes: genericAttributes,
           content: .init(state: contentState, staleDate: content.staleDate)
@@ -281,13 +310,15 @@ final class LiveActivitiesService {
    *   - content: Final content state
    *   - dismissalPolicy: How the activity should be dismissed
    *   - timestamp: Custom timestamp (iOS 17.2+)
+   *   - dismissalDate: Date for dismissal when policy is "after" (within 4-hour window)
    * - Throws: System or activity not found errors
    */
   func endActivity(
     activityId: String,
     content: LiveActivityContent,
-    dismissalPolicy _: LiveActivityDismissalPolicy?,
-    timestamp: Date?
+    dismissalPolicy: LiveActivityDismissalPolicy?,
+    timestamp: Date?,
+    dismissalDate: Date?
   ) throws {
     guard #available(iOS 16.2, *) else {
       throw unsupportedVersionError()
@@ -308,7 +339,25 @@ final class LiveActivitiesService {
     )
 
     // Convert dismissalPolicy - ActivityKit uses different enum
-    let policy: ActivityUIDismissalPolicy = .default // Simple mapping for now
+    let policy: ActivityUIDismissalPolicy = {
+      switch dismissalPolicy {
+      case "immediate":
+        return .immediate
+      case "after":
+        guard let dismissalDate else {
+          // If "after" is specified but no date provided, fall back to default
+          return .default
+        }
+
+        // Ensure dismissalDate is within 4-hour window
+        let maxAllowedDate = Date().addingTimeInterval(4 * 60 * 60) // 4 hours from now
+        let clampedDate = min(dismissalDate, maxAllowedDate)
+
+        return .after(clampedDate)
+      default:
+        return .default
+      }
+    }()
 
     if #available(iOS 17.2, *), let timestamp {
       Task {

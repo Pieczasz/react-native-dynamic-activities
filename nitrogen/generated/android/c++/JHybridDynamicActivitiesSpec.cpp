@@ -124,9 +124,9 @@ namespace margelo::nitro::dynamicactivities {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<void>> JHybridDynamicActivitiesSpec::endLiveActivity(const std::string& activityId, const LiveActivityContent& content, std::optional<LiveActivityDismissalPolicy> dismissalPolicy, std::optional<std::chrono::system_clock::time_point> timestamp) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* activityId */, jni::alias_ref<JLiveActivityContent> /* content */, jni::alias_ref<JLiveActivityDismissalPolicy> /* dismissalPolicy */, jni::alias_ref<JInstant> /* timestamp */)>("endLiveActivity");
-    auto __result = method(_javaPart, jni::make_jstring(activityId), JLiveActivityContent::fromCpp(content), dismissalPolicy.has_value() ? JLiveActivityDismissalPolicy::fromCpp(dismissalPolicy.value()) : nullptr, timestamp.has_value() ? JInstant::fromChrono(timestamp.value()) : nullptr);
+  std::shared_ptr<Promise<void>> JHybridDynamicActivitiesSpec::endLiveActivity(const std::string& activityId, const LiveActivityContent& content, std::optional<LiveActivityDismissalPolicy> dismissalPolicy, std::optional<std::chrono::system_clock::time_point> timestamp, std::optional<std::chrono::system_clock::time_point> dismissalDate) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* activityId */, jni::alias_ref<JLiveActivityContent> /* content */, jni::alias_ref<JLiveActivityDismissalPolicy> /* dismissalPolicy */, jni::alias_ref<JInstant> /* timestamp */, jni::alias_ref<JInstant> /* dismissalDate */)>("endLiveActivity");
+    auto __result = method(_javaPart, jni::make_jstring(activityId), JLiveActivityContent::fromCpp(content), dismissalPolicy.has_value() ? JLiveActivityDismissalPolicy::fromCpp(dismissalPolicy.value()) : nullptr, timestamp.has_value() ? JInstant::fromChrono(timestamp.value()) : nullptr, dismissalDate.has_value() ? JInstant::fromChrono(dismissalDate.value()) : nullptr);
     return [&]() {
       auto __promise = Promise<void>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& /* unit */) {

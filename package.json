@@ -1,173 +1,173 @@
 {
-	"name": "react-native-dynamic-activities",
-	"version": "0.1.0",
-	"description": "react-native-dynamic-activities is a react native package built with Nitro Modules to allow you easily integrate Live Activities into your react-native app",
-	"main": "./lib/commonjs/index.js",
-	"module": "./lib/module/index.js",
-	"types": "./lib/typescript/src/index.d.ts",
-	"react-native": "src/index",
-	"source": "src/index",
-	"scripts": {
-		"test": "jest",
-		"test:watch": "jest --watch",
-		"typecheck": "tsc --project ./config/tsconfig.json --noEmit",
-		"clean": "git clean -dfX",
-		"release": "release-it",
-		"lint": "biome check --config-path ./config/biome.json --write .",
-		"lint:unsafe": "biome check --config-path ./config/biome.json --write --unsafe .",
-		"format": "biome format --config-path ./config/biome.json --write .",
-		"lint:swift": "bash ./scripts/swift-lint.sh",
-		"lint:kotlin": "bash ./scripts/kotlin-lint.sh",
-		"format:swift": "bash ./scripts/swift-format.sh",
-		"format:clang": "bash ./scripts/clang-format.sh",
-		"format:native": "bun run format:swift && bun run format:clang",
-		"lint:native": "bun run lint:swift && bun run lint:kotlin",
-		"format:all": "bun run format && bun run format:native",
-		"lint:all": "bun run lint && bun run lint:native",
-		"build": "bun run typecheck && bob build",
-		"codegen": "nitro-codegen --logLevel=\"debug\" && bun run build && node scripts/post-script.js",
-		"prepare": "husky",
-		"create-widget": "node scripts/create-widget.js",
-		"widget:doctor": "node scripts/create-widget.js --doctor",
-		"widget:validate": "node scripts/create-widget.js --validate",
-		"project:clean": "pkill -f Xcode || true && rm -rf node_modules lib nitrogen example/node_modules example/Pods example/Podfile.lock example/build ~/Library/Developer/Xcode/DerivedData && bun install && bun run codegen && cd example && bun install && cd ios && pod install && xed . && cd .. && cd ..",
-		"ios:clean": "cd example/ios && rm -rf Pods Podfile.lock build && rm -rf ~/Library/Developer/Xcode/DerivedData"
-	},
-	"keywords": [
-		"react-native",
-		"react-native-dynamic-activities",
-		"live-activities",
-		"activity-kit",
-		"alarm-kit",
-		"widget-kit",
-		"nitro-modules",
-		"nitro"
-	],
-	"files": [
-		"src",
-		"react-native.config.js",
-		"lib",
-		"nitrogen",
-		"cpp",
-		"android/build.gradle",
-		"android/gradle.properties",
-		"android/CMakeLists.txt",
-		"android/src",
-		"ios/**/*.h",
-		"ios/**/*.m",
-		"ios/**/*.mm",
-		"ios/**/*.cpp",
-		"ios/**/*.swift",
-		"app.plugin.js",
-		"scripts/cli.js",
-		"templates",
-		"WIDGET_SETUP.md",
-		"*.podspec",
-		"README.md"
-	],
-	"workspaces": ["example", "docs"],
-	"repository": "https://github.com/pieczasz/react-native-dynamic-activities.git",
-	"author": "Pieczasz",
-	"license": "MIT",
-	"bugs": "https://github.com/pieczasz/react-native-dynamic-activities/issues",
-	"homepage": "https://github.com/pieczasz/react-native-dynamic-activities#readme",
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^1.9.0",
-		"@commitlint/config-conventional": "^17.0.2",
-		"@react-native/metro-config": "^0.80.1",
-		"@release-it/conventional-changelog": "^9.0.0",
-		"@types/jest": "^29.5.14",
-		"@types/node": "^24.3.0",
-		"@types/react": "^19.1.0",
-		"chalk": "^5.6.0",
-		"commander": "^14.0.0",
-		"commitlint": "^19.8.1",
-		"conventional-changelog-conventionalcommits": "^9.0.0",
-		"husky": "^9.1.7",
-		"jest": "^29.7.0",
-		"nitro-codegen": "^0.29.1",
-		"react": "19.1.0",
-		"react-native": "0.80.0",
-		"react-native-builder-bob": "^0.37.0",
-		"react-native-nitro-modules": "^0.29.1",
-		"release-it": "^19.0.3",
-		"ts-jest": "^29.4.0",
-		"ts-node": "^10.9.2",
-		"typescript": "5.0.4"
-	},
-	"peerDependencies": {
-		"react": "*",
-		"react-native": "*",
-		"react-native-nitro-modules": "*"
-	},
-	"bin": {
-		"react-native-dynamic-activities": "./scripts/cli.js",
-		"rn-dynamic-activities": "./scripts/cli.js"
-	},
-	"react-native-builder-bob": {
-		"source": "src",
-		"output": "lib",
-		"targets": [
-			"commonjs",
-			"module",
-			[
-				"typescript",
-				{
-					"project": "config/tsconfig.json"
-				}
-			]
-		]
-	},
-	"commitlint": {
-		"extends": ["@commitlint/config-conventional"]
-	},
-	"release-it": {
-		"npm": {
-			"publish": true
-		},
-		"git": {
-			"commitMessage": "chore: release ${version}",
-			"tagName": "v${version}",
-			"requireCleanWorkingDir": true
-		},
-		"github": {
-			"release": true
-		},
-		"hooks": {
-			"before:release": "bun i && bun typescript"
-		},
-		"plugins": {
-			"@release-it/conventional-changelog": {
-				"preset": {
-					"name": "conventionalcommits",
-					"types": [
-						{
-							"type": "feat",
-							"section": "✨ Features"
-						},
-						{
-							"type": "perf",
-							"section": "💨 Performance Improvements"
-						},
-						{
-							"type": "fix",
-							"section": "🐛 Bug Fixes"
-						},
-						{
-							"type": "chore(deps)",
-							"section": "🛠️ Dependency Upgrades"
-						},
-						{
-							"type": "docs",
-							"section": "📚 Documentation"
-						}
-					]
-				}
-			}
-		}
-	}
+  "name": "react-native-dynamic-activities",
+  "version": "0.1.0",
+  "description": "react-native-dynamic-activities is a react native package built with Nitro Modules to allow you easily integrate Live Activities into your react-native app",
+  "main": "./lib/commonjs/index.js",
+  "module": "./lib/module/index.js",
+  "types": "./lib/typescript/src/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "typecheck": "tsc --project ./config/tsconfig.json --noEmit",
+    "clean": "git clean -dfX",
+    "release": "release-it",
+    "lint": "biome check --config-path ./config/biome.json --write .",
+    "lint:unsafe": "biome check --config-path ./config/biome.json --write --unsafe .",
+    "format": "biome format --config-path ./config/biome.json --write .",
+    "lint:swift": "bash ./scripts/swift-lint.sh",
+    "lint:kotlin": "bash ./scripts/kotlin-lint.sh",
+    "format:swift": "bash ./scripts/swift-format.sh",
+    "format:clang": "bash ./scripts/clang-format.sh",
+    "format:native": "bun run format:swift && bun run format:clang",
+    "lint:native": "bun run lint:swift && bun run lint:kotlin",
+    "format:all": "bun run format && bun run format:native",
+    "lint:all": "bun run lint && bun run lint:native",
+    "build": "bun run typecheck && bob build",
+    "codegen": "nitro-codegen --logLevel=\"debug\" && bun run build && node scripts/post-script.js",
+    "prepare": "husky",
+    "create-widget": "node scripts/create-widget.js",
+    "widget:doctor": "node scripts/create-widget.js --doctor",
+    "widget:validate": "node scripts/create-widget.js --validate",
+    "project:clean": "pkill -f Xcode || true && rm -rf node_modules lib nitrogen example/node_modules example/Pods example/Podfile.lock example/build ~/Library/Developer/Xcode/DerivedData && bun install && bun run codegen && cd example && bun install && cd ios && pod install && xed . && cd .. && cd ..",
+    "ios:clean": "cd example/ios && rm -rf Pods Podfile.lock build && rm -rf ~/Library/Developer/Xcode/DerivedData"
+  },
+  "keywords": [
+    "react-native",
+    "react-native-dynamic-activities",
+    "live-activities",
+    "activity-kit",
+    "alarm-kit",
+    "widget-kit",
+    "nitro-modules",
+    "nitro"
+  ],
+  "files": [
+    "src",
+    "react-native.config.js",
+    "lib",
+    "nitrogen",
+    "cpp",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/CMakeLists.txt",
+    "android/src",
+    "ios/**/*.h",
+    "ios/**/*.m",
+    "ios/**/*.mm",
+    "ios/**/*.cpp",
+    "ios/**/*.swift",
+    "app.plugin.js",
+    "scripts/cli.js",
+    "templates",
+    "WIDGET_SETUP.md",
+    "*.podspec",
+    "README.md"
+  ],
+  "workspaces": ["example", "docs"],
+  "repository": "https://github.com/pieczasz/react-native-dynamic-activities.git",
+  "author": "Pieczasz",
+  "license": "MIT",
+  "bugs": "https://github.com/pieczasz/react-native-dynamic-activities/issues",
+  "homepage": "https://github.com/pieczasz/react-native-dynamic-activities#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0",
+    "@commitlint/config-conventional": "^17.0.2",
+    "@react-native/metro-config": "^0.80.1",
+    "@release-it/conventional-changelog": "^9.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.0",
+    "chalk": "^5.6.0",
+    "commander": "^14.0.0",
+    "commitlint": "^19.8.1",
+    "conventional-changelog-conventionalcommits": "^9.0.0",
+    "husky": "^9.1.7",
+    "jest": "^29.7.0",
+    "nitro-codegen": "^0.29.1",
+    "react": "19.1.0",
+    "react-native": "0.80.0",
+    "react-native-builder-bob": "^0.37.0",
+    "react-native-nitro-modules": "^0.29.1",
+    "release-it": "^19.0.3",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "5.0.4"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-nitro-modules": "*"
+  },
+  "bin": {
+    "react-native-dynamic-activities": "./scripts/cli.js",
+    "rn-dynamic-activities": "./scripts/cli.js"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "config/tsconfig.json"
+        }
+      ]
+    ]
+  },
+  "commitlint": {
+    "extends": ["@commitlint/config-conventional"]
+  },
+  "release-it": {
+    "npm": {
+      "publish": true
+    },
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}",
+      "requireCleanWorkingDir": true
+    },
+    "github": {
+      "release": true
+    },
+    "hooks": {
+      "before:release": "bun install && bun run codegen"
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": {
+          "name": "conventionalcommits",
+          "types": [
+            {
+              "type": "feat",
+              "section": "✨ Features"
+            },
+            {
+              "type": "perf",
+              "section": "💨 Performance Improvements"
+            },
+            {
+              "type": "fix",
+              "section": "🐛 Bug Fixes"
+            },
+            {
+              "type": "chore(deps)",
+              "section": "🛠️ Dependency Upgrades"
+            },
+            {
+              "type": "docs",
+              "section": "📚 Documentation"
+            }
+          ]
+        }
+      }
+    }
+  }
 }

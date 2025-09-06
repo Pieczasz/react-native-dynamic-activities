@@ -242,7 +242,7 @@ export const LiveActivityErrorMessages = {
     "The app doesn't have the required entitlement to start a Live Activity.",
   [LiveActivityErrorCode.UNSUPPORTED]: "The device doesn't support Live Activities.",
   [LiveActivityErrorCode.UNSUPPORTED_TARGET]:
-    "The app doesn't have the required entitlement to start a Live Activities.",
+    "The app doesn't have the required entitlement to start Live Activities.",
   [LiveActivityErrorCode.VISIBILITY]:
     "The app tried to start the Live Activity while it was in the background.",
   [LiveActivityErrorCode.NETWORK_ERROR]: "A network error occurred while processing the request.",

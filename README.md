@@ -175,17 +175,35 @@ const { activityId, pushToken } = await DynamicActivities.startLiveActivity(
 	content
 );
 
+// Start with ActivityStyle (iOS 18.0+ only)
+const { activityId: styledId } = await DynamicActivities.startLiveActivity(
+	attributes,
+	content,
+	undefined, // pushToken
+	'transient' // ActivityStyle: 'standard' | 'transient'
+);
+
 // Update activity
 await DynamicActivities.updateLiveActivity(activityId, {
 	state: 'active',
 	relevanceScore: 0.8,
 });
 
-// End activity
+// End activity with default dismissal
 await DynamicActivities.endLiveActivity(
 	activityId,
 	{ state: 'ended' },
 	'default'
+);
+
+// End activity with scheduled dismissal (new feature!)
+const dismissalDate = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 hours from now
+await DynamicActivities.endLiveActivity(
+	activityId,
+	{ state: 'ended' },
+	'after',
+	undefined, // timestamp
+	dismissalDate // will be visible for 2 hours
 );
 ```
 
@@ -237,12 +255,27 @@ For complete setup documentation, see [WIDGET_SETUP.md](WIDGET_SETUP.md).
 - `areLiveActivitiesSupported(): Promise<{ supported: boolean; version: number; comment: string }>`
 - `startLiveActivity(attributes, content, pushToken?, style?, alertConfiguration?, start?): Promise<{ activityId: string; pushToken?: string }>`
 - `updateLiveActivity(activityId, content, alertConfiguration?, timestamp?): Promise<void>`
-- `endLiveActivity(activityId, content, dismissalPolicy?): Promise<void>`
+- `endLiveActivity(activityId, content, dismissalPolicy?, timestamp?, dismissalDate?): Promise<void>`
 
 Platform notes:
 
 - iOS only. Android methods reject with an error.
 - Some parameters are available only on newer iOS versions (e.g., `style` on 18.0+, timestamp support on 17.2+). See TS spec docs.
+
+## Documentation
+
+### 📚 Comprehensive Guides
+
+- **[Error Handling Guide](./ERROR_HANDLING.md)** - Complete error handling patterns, recovery strategies, and troubleshooting
+- **[Dismissal Policies Guide](./DISMISSAL_POLICIES.md)** - Detailed explanation of activity dismissal options including the new "after date" feature
+- **[CLI Tool Guide](./CLI_GUIDE.md)** - Complete widget scaffolding and project setup using command-line tools
+- **[Widget Setup](./WIDGET_SETUP.md)** - Manual widget configuration and Xcode integration
+
+### 🔧 Quick References
+
+- **API Documentation** - See TypeScript interfaces in `src/specs/LiveActivities.nitro.ts`
+- **Error Codes** - Complete error reference in `src/specs/LiveActivitiesErrors.nitro.ts`
+- **Development Setup** - See `CLAUDE.md` for development workflow and commands
 
 ## Troubleshooting
 
@@ -250,6 +283,7 @@ Platform notes:
 - `denied` errors: User disabled Live Activities; guide them to Settings.
 - Simulator support is limited. Test on a physical device for Dynamic Island/Lock Screen.
 - If build errors mention Nitro types, run `npm run codegen` and clean Xcode build.
+- **For detailed troubleshooting**: See [Error Handling Guide](./ERROR_HANDLING.md)
 
 ## Contributing
 

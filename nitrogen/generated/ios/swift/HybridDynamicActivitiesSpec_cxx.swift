@@ -202,11 +202,18 @@ open class HybridDynamicActivitiesSpec_cxx {
   }
   
   @inline(__always)
-  public final func endLiveActivity(activityId: std.string, content: LiveActivityContent, dismissalPolicy: bridge.std__optional_LiveActivityDismissalPolicy_, timestamp: bridge.std__optional_std__chrono__system_clock__time_point_) -> bridge.Result_std__shared_ptr_Promise_void___ {
+  public final func endLiveActivity(activityId: std.string, content: LiveActivityContent, dismissalPolicy: bridge.std__optional_LiveActivityDismissalPolicy_, timestamp: bridge.std__optional_std__chrono__system_clock__time_point_, dismissalDate: bridge.std__optional_std__chrono__system_clock__time_point_) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
       let __result = try self.__implementation.endLiveActivity(activityId: String(activityId), content: content, dismissalPolicy: dismissalPolicy.value, timestamp: { () -> Date? in
         if bridge.has_value_std__optional_std__chrono__system_clock__time_point_(timestamp) {
           let __unwrapped = bridge.get_std__optional_std__chrono__system_clock__time_point_(timestamp)
+          return Date(fromChrono: __unwrapped)
+        } else {
+          return nil
+        }
+      }(), dismissalDate: { () -> Date? in
+        if bridge.has_value_std__optional_std__chrono__system_clock__time_point_(dismissalDate) {
+          let __unwrapped = bridge.get_std__optional_std__chrono__system_clock__time_point_(dismissalDate)
           return Date(fromChrono: __unwrapped)
         } else {
           return nil

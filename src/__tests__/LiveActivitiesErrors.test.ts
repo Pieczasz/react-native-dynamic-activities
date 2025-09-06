@@ -71,7 +71,7 @@ describe("Live Activities Error Handling", () => {
         "The device doesn't support Live Activities.",
       );
       expect(LiveActivityErrorMessages[LiveActivityErrorCode.UNSUPPORTED_TARGET]).toBe(
-        "The app doesn't have the required entitlement to start a Live Activities.",
+        "The app doesn't have the required entitlement to start Live Activities.",
       );
       expect(LiveActivityErrorMessages[LiveActivityErrorCode.VISIBILITY]).toBe(
         "The app tried to start the Live Activity while it was in the background.",

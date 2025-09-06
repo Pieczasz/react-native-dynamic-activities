@@ -25,7 +25,6 @@ export interface LiveActivityAlertConfiguration {
   sound: string;
 }
 
-// TODO: Add support for after date
 export type LiveActivityDismissalPolicy = "default" | "immediate" | "after";
 
 export interface PushTokenUpdateEvent {
@@ -92,8 +91,13 @@ export interface DynamicActivities extends HybridObject<{ ios: "swift"; android:
    * End a Live Activity
    * @param activityId - The ID of the activity to end
    * @param content - The final content for the Live Activity
-   * @param dismissalPolicy - Optional dismissal policy
+   * @param dismissalPolicy - Optional dismissal policy:
+   *   - "default": System default behavior
+   *   - "immediate": Remove immediately
+   *   - "after": Remove at specified date (requires dismissalDate parameter)
    * @param timestamp - Optional timestamp (iOS 17.2+)
+   * @param dismissalDate - Date when activity should be dismissed (required when dismissalPolicy is "after").
+   *   Must be within 4-hour window from when the activity ends. If beyond 4 hours, will be clamped to maximum allowed time.
    * @throws {LiveActivityError} When activity is not found or already ended
    */
   endLiveActivity(
@@ -101,5 +105,6 @@ export interface DynamicActivities extends HybridObject<{ ios: "swift"; android:
     content: LiveActivityContent,
     dismissalPolicy?: LiveActivityDismissalPolicy,
     timestamp?: Date,
+    dismissalDate?: Date,
   ): Promise<void>;
 }

@@ -7,6 +7,7 @@ module.exports = {
       {
         tsconfig: {
           verbatimModuleSyntax: false,
+          esModuleInterop: true,
         },
       },
     ],

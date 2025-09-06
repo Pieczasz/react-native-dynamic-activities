@@ -72,14 +72,16 @@ final class HybridDynamicActivities: HybridDynamicActivitiesSpec {
     activityId: String,
     content: LiveActivityContent,
     dismissalPolicy: LiveActivityDismissalPolicy?,
-    timestamp: Date?
+    timestamp: Date?,
+    dismissalDate: Date?
   ) throws -> Promise<Void> {
     executeWithPromise { [weak self] in
       try self?.service.endActivity(
         activityId: activityId,
         content: content,
         dismissalPolicy: dismissalPolicy,
-        timestamp: timestamp
+        timestamp: timestamp,
+        dismissalDate: dismissalDate
       )
     }
   }

@@ -110,8 +110,8 @@ namespace margelo::nitro::dynamicactivities {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<void>> endLiveActivity(const std::string& activityId, const LiveActivityContent& content, std::optional<LiveActivityDismissalPolicy> dismissalPolicy, std::optional<std::chrono::system_clock::time_point> timestamp) override {
-      auto __result = _swiftPart.endLiveActivity(activityId, content, dismissalPolicy, timestamp);
+    inline std::shared_ptr<Promise<void>> endLiveActivity(const std::string& activityId, const LiveActivityContent& content, std::optional<LiveActivityDismissalPolicy> dismissalPolicy, std::optional<std::chrono::system_clock::time_point> timestamp, std::optional<std::chrono::system_clock::time_point> dismissalDate) override {
+      auto __result = _swiftPart.endLiveActivity(activityId, content, dismissalPolicy, timestamp, dismissalDate);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

@@ -46,6 +46,8 @@ class HybridDynamicActivities : HybridDynamicActivitiesSpec() {
         activityId: String,
         content: LiveActivityContent,
         dismissalPolicy: LiveActivityDismissalPolicy?,
+        timestamp: java.time.Instant?,
+        dismissalDate: java.time.Instant?,
     ): Promise<Unit> {
         val promise = Promise<Unit>()
         promise.reject(UnsupportedOperationException("Live Activities are iOS-only."))
