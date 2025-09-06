@@ -30,6 +30,16 @@ const sidebars: SidebarsConfig = {
 		},
 		{
 			type: "category",
+			label: "Comprehensive Guides",
+			items: [
+				"guides/ERROR_HANDLING",
+				"guides/DISMISSAL_POLICIES", 
+				"guides/ActivityStyle",
+				"guides/CLI_GUIDE"
+			],
+		},
+		{
+			type: "category",
 			label: "Platform Support",
 			items: ["platform/ios-compatibility"],
 		},
