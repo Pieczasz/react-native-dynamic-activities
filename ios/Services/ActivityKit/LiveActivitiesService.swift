@@ -77,7 +77,8 @@ private final class ActivityRegistry {
   /// Get all active activity IDs for debugging/monitoring
   func getAllActivityIds() -> [String] {
     queue.sync { [weak self] in
-      Array(self?.activities.keys ?? [])
+      guard let activities = self?.activities else { return [] }
+      return Array(activities.keys)
     }
   }
 }
@@ -201,12 +202,10 @@ final class LiveActivitiesService {
       if #available(iOS 18.0, *), let style {
         // iOS 18.0+ with ActivityStyle support
         let activityStyle: ActivityStyle = switch style {
-        case "standard":
+        case .standard:
           .standard
-        case "transient":
+        case .transient:
           .transient
-        default:
-          .standard
         }
 
         activity = try Activity.request(
@@ -340,10 +339,14 @@ final class LiveActivitiesService {
 
     // Convert dismissalPolicy - ActivityKit uses different enum
     let policy: ActivityUIDismissalPolicy = {
+      guard let dismissalPolicy = dismissalPolicy else {
+        return .default
+      }
+      
       switch dismissalPolicy {
-      case "immediate":
+      case .immediate:
         return .immediate
-      case "after":
+      case .after:
         guard let dismissalDate else {
           // If "after" is specified but no date provided, fall back to default
           return .default
@@ -354,7 +357,7 @@ final class LiveActivitiesService {
         let clampedDate = min(dismissalDate, maxAllowedDate)
 
         return .after(clampedDate)
-      default:
+      case .default:
         return .default
       }
     }()
