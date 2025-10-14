@@ -76,7 +76,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.2.6",
     "@commitlint/config-conventional": "^17.8.1",
     "@react-native/metro-config": "^0.80.2",
     "@release-it/conventional-changelog": "^9.0.4",
